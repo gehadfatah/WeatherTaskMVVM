@@ -77,7 +77,7 @@ public class AutoCompleteAdapter extends BaseAdapter implements Filterable {
             protected FilterResults performFiltering(CharSequence charSequence) {
                 FilterResults filterResults = new FilterResults();
                 if (charSequence != null) {
-                    mViewModel.getArticleResponseLiveData(charSequence.toString()).observe((MainActivity)activity, locationSearchModels -> {
+                    mViewModel.getRemoteListCitiesWeather(charSequence.toString()).observe(((MainActivity)activity), locationSearchModels -> {
                         if (locationSearchModels != null) {
                             if (!locationSearchModels.isEmpty()) {
                                 mResultList.clear();

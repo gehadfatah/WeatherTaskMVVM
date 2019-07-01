@@ -28,7 +28,7 @@ public class WeatherViewModel extends ViewModel {
         return weatherRepository.getWeather();
     }
 
-    public LiveData<List<LocationSearchModel>> getArticleResponseLiveData(String location) {
+    public LiveData<List<LocationSearchModel>> getRemoteListCitiesWeather(String location) {
         return weatherRepository.getRemoteListCitiesWeather(location);
     }
 
@@ -37,5 +37,9 @@ public class WeatherViewModel extends ViewModel {
     }
     public LiveData<AccuWeather5DayModel> getRemotegetAccu5DayWeatherData(String cityKey) {
         return weatherRepository.getAccuWeatherData5days(cityKey);
+    }
+
+    public void insertWeatherCity(AccuWeatherDb weatherDb) {
+        weatherRepository.insertWeatherCity(weatherDb);
     }
 }

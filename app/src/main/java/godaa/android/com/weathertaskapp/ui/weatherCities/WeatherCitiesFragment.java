@@ -20,6 +20,7 @@ import godaa.android.com.weathertaskapp.MainActivity;
 import godaa.android.com.weathertaskapp.R;
 import godaa.android.com.weathertaskapp.WeatherViewModel;
 import godaa.android.com.weathertaskapp.data.local.WeatherDatabase;
+import godaa.android.com.weathertaskapp.data.local.entity.AccuWeatherDb;
 import godaa.android.com.weathertaskapp.data.model.AccuWeather5DayModel;
 import godaa.android.com.weathertaskapp.data.model.AccuWeatherModel;
 import godaa.android.com.weathertaskapp.data.model.LocationSearchModel;
@@ -56,6 +57,7 @@ public class WeatherCitiesFragment extends BaseFragmentList implements ISuccesRe
     public static final String WIDGET_LOCATION = "gehad.weather.widget.location";
     public static final String WIDGET_ICON = "gehad.weather.widget.icon";
     AccuWeatherModel maccuWeatherModel = new AccuWeatherModel();
+    AccuWeather5DayModel maccuWeather5DayModel;
     private String[] PermissionLocation = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION};
     private boolean firstAddedLocationOrDefaultLondon = true;
@@ -83,7 +85,7 @@ public class WeatherCitiesFragment extends BaseFragmentList implements ISuccesRe
 
     private void setSearchAutoComplete() {
         etCityName.setThreshold(2);
-        etCityName.setAdapter(new AutoCompleteAdapter(getActivity(),mViewModel));
+        etCityName.setAdapter(new AutoCompleteAdapter(getActivity(), mViewModel));
 
         etCityName.setOnItemClickListener((adapterView, view, i, l) -> {
 
@@ -91,14 +93,14 @@ public class WeatherCitiesFragment extends BaseFragmentList implements ISuccesRe
             // cities.add(mLocationSearchModel);
             etCityName.setText(mLocationSearchModel.getLocalizedName());
             //WeatherConditions.getAccuWeatherData(mLocationSearchModel.getKey(), ACCU_WEATHER_APP_ID, MainActivity.this, true);
-            mViewModel.getRemotegetAccuWeatherData(mLocationSearchModel.getKey()).observe(this,accuWeatherModel -> {
+            mViewModel.getRemotegetAccuWeatherData(mLocationSearchModel.getKey()).observe(this, accuWeatherModel -> {
                 maccuWeatherModel = accuWeatherModel;
 
             });
 
-           // WeatherConditions.getAccuWeatherData5Days(mLocationSearchModel.getKey(), ACCU_WEATHER_APP_ID, MainActivity.this, true);
-            mViewModel.getRemotegetAccu5DayWeatherData(mLocationSearchModel.getKey()).observe(this,accuWeather5DayModel -> {
-
+            // WeatherConditions.getAccuWeatherData5Days(mLocationSearchModel.getKey(), ACCU_WEATHER_APP_ID, MainActivity.this, true);
+            mViewModel.getRemotegetAccu5DayWeatherData(mLocationSearchModel.getKey()).observe(this, accuWeather5DayModel -> {
+                maccuWeather5DayModel=accuWeather5DayModel;
                 if (firstAddedLocationOrDefaultLondon) {
                     AddClick(accuWeather5DayModel, maccuWeatherModel, mLocationSearchModel);
                     firstAddedLocationOrDefaultLondon = false;
@@ -110,6 +112,7 @@ public class WeatherCitiesFragment extends BaseFragmentList implements ISuccesRe
             });
         });
     }
+
     private void addLondonCity() {
         LocationSearchModel.Country country = new LocationSearchModel.Country();
         country.setID("GB");
@@ -126,6 +129,7 @@ public class WeatherCitiesFragment extends BaseFragmentList implements ISuccesRe
         mLocationSearchModel = locationSearchModel;
 
     }
+
     @Override
     public int getLayoutId() {
         return R.layout.fragment_cities_list;
@@ -152,6 +156,12 @@ public class WeatherCitiesFragment extends BaseFragmentList implements ISuccesRe
         accuWeatherModelcities.add(accuWeatherModel);
         AccuWeather5DayModelcities.add(accuWeather5DayModel);
         adapterCitesAccuWeather.notifyDataSetChanged();
+        insertNewWeatherCityToLocal();
+    }
+
+    private void insertNewWeatherCityToLocal() {
+        AccuWeatherDb accuWeatherDb = new AccuWeatherDb(maccuWeatherModel.getWeatherText(), mLocationSearchModel.getLocalizedName(), maccuWeatherModel.getWeatherIcon(), maccuWeather5DayModel.getDailyForecasts(), maccuWeatherModel.getTemperature());
+        mViewModel.insertWeatherCity(accuWeatherDb);
 
     }
 
@@ -164,7 +174,6 @@ public class WeatherCitiesFragment extends BaseFragmentList implements ISuccesRe
     public void successWeather(AccuWeatherModel weatherModel) {
 
     }
-
 
 
     @Override
