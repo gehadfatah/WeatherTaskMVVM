@@ -91,11 +91,16 @@ public class WeatherCitiesFragment extends BaseFragmentList implements ISuccesRe
         //mSwipeRefreshLayout.setRefreshing(true);
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
+
     }
 
     @Override
     public void setUpObservers() {
+        mViewModel.getAccuWeatherDbLiveData().observe(this, accuWeatherDbs -> {
+            if (accuWeatherDbs.size() > 0)
+                accuWeatherDbs.get(0);
 
+        });
     }
 
 
@@ -195,7 +200,7 @@ public class WeatherCitiesFragment extends BaseFragmentList implements ISuccesRe
         accuWeatherModelcities.add(accuWeatherModel);
         AccuWeather5DayModelcities.add(accuWeather5DayModel);
         adapterCitesAccuWeather.notifyDataSetChanged();
-         //insertNewWeatherCityToLocal(accuWeather5DayModel,accuWeatherModel,locationSearchModel);
+        insertNewWeatherCityToLocal(accuWeather5DayModel, accuWeatherModel, locationSearchModel);
     }
 
     private void insertNewWeatherCityToLocal(AccuWeather5DayModel accuWeather5DayModel, AccuWeatherModel accuWeatherModel, LocationSearchModel locationSearchModel) {

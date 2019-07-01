@@ -1,11 +1,14 @@
 package godaa.android.com.weathertaskapp.repository;
 
+import android.os.SystemClock;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 
 import godaa.android.com.weathertaskapp.data.local.WeatherDao;
@@ -93,7 +96,15 @@ public class WeatherRepository {
     }
 
     public void insertWeatherCity(AccuWeatherDb weatherDb) {
-        local.insertWeatherResponse(weatherDb);
+        Executor executor = Executors.newSingleThreadExecutor();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                //just to show that there is a paging
+                local.insertWeatherResponse(weatherDb);
+
+            }
+        });
     }
 
     public void clearAllData() {
