@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import godaa.android.com.weathertaskapp.data.model.AccuWeather5DayModel;
 import godaa.android.com.weathertaskapp.data.model.AccuWeatherModel;
 import godaa.android.com.weathertaskapp.data.model.LocationSearchModel;
 import retrofit2.Call;
@@ -18,9 +19,11 @@ public interface ApiService {
 
 
     @GET("currentconditions/v1/{key}")
-    Call<List<AccuWeatherModel>> getAccuWeatherData(@Path("key") String cityKey, @Query("apikey") String appId);
+    Call<List<AccuWeatherModel>> getAccuWeatherData(@Path("key") String cityKey/*, @Query("apikey") String appId*/);
     @GET("locations/v1/cities/autocomplete")
-    Call<List<LocationSearchModel>> getAccuWeatherCities(@Query("apikey") String appId, @Query("q") String query);
+    Call<List<LocationSearchModel>> getAccuWeatherCities(/*@Query("apikey") String appId,*/ @Query("q") String query);
+    @GET("forecasts/v1/daily/5day/{key}?metric=true")
+    Call<AccuWeather5DayModel> getAccuWeatherData5days(@Path("key") String cityKey);
 
 }
 

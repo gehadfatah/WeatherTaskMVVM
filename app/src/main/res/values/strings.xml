@@ -1,3 +1,39 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">WeatherTaskApp</string>
+    <string name="download_in_progress">Download in progress</string>
+    <string name="no_network_connection">Oops no network connection</string>
+    <string name="no_results">No results</string>
+    <string name="enter_city_name">Search city name</string>
+    <string name="format_temperature"><xliff:g id="temp">%1.0f</xliff:g>\u00B0</string>
+    <string name="location_permission_dialog_title">Location Permission</string>
+    <string name="location_permission_prompt">You need to grant location permission in order to get weather updates</string>
+    <string name="set_custom_location">You can set custom location in App Settings</string>
+
+    <string name="icon">weather_icon</string>
+    <string name="retry">Retry</string>
+    <string name="loading_weather">Loading weather</string>
+    <string name="precipitation">Precipitation</string>
+    <string name="visibility">Visibility</string>
+    <string name="wind">Wind</string>
+    <string name="unknown_error">Unknown Error</string>
+    <string name="no_internet">Check your internet connection</string>
+    <string name="location_not_available">Device location not available</string>
+    <string name="gps_enable_prompt">You need to enable GPS in order to get weather updates</string>
+    <string name="ad_id">ca-app-pub-8292346947931553~5764095591</string>
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="appwidget_text">weather condition</string>
+    <string name="add_widget">Add widget</string>
+    <string name="condition_text">condition_text</string>
+    <string name="no_data">No data</string>
+    <string name="widget_background">widget background</string>
+    <string name="forecast">Forecast:</string>
+    <string name="widget_loading">Content loading</string>
+    <string name="widget_forecast">%1$s</string>
+    <string name="data_fetch_failed">Data fetch failed.\nPlease check your internet connection and try again.\n\nSwipe down to retry 🙂</string>
+    <string name="about">About</string>
+    <string name="version">Version 1.0</string>
+    <string name="myweather">MyWeather 1.0</string>
+    <string name="tempC">\u2103</string>
+    <string name="enable_gps">Enable GPS</string>
+    <string name="addCity">Add city</string>
 </resources>

@@ -1,4 +1,4 @@
-package godaa.android.com.weathertaskapp.data;
+package godaa.android.com.weathertaskapp.data.local;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -18,4 +18,7 @@ public interface WeatherDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertWeatherResponse(AccuWeatherDb weather);
+    @Query("DELETE FROM weather")
+    public  void clearAllData();
+
 }

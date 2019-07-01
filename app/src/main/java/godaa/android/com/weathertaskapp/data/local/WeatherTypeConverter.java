@@ -12,7 +12,7 @@ import godaa.android.com.weathertaskapp.data.model.DailyForecast;
 
 public class WeatherTypeConverter {
     @TypeConverter
-    public String fromOptionValuesList(List<DailyForecast> dailyForecasts) {
+    public String fromDailyForecastList(List<DailyForecast> dailyForecasts) {
         if (dailyForecasts == null) {
             return (null);
         }
@@ -24,7 +24,7 @@ public class WeatherTypeConverter {
     }
 
     @TypeConverter
-    public List<DailyForecast> toOptionValuesList(String dailyForecasts) {
+    public List<DailyForecast> toDailyForecastList(String dailyForecasts) {
         if (dailyForecasts == null) {
             return (null);
         }

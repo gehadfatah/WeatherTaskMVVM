@@ -3,41 +3,30 @@ package godaa.android.com.weathertaskapp;
 import android.app.Activity;
 import android.preference.PreferenceManager;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.multidex.MultiDexApplication;
 
-import com.jakewharton.threetenabp.AndroidThreeTen;
-
-import javax.inject.Inject;
 
 
-import godaa.android.com.weathertaskapp.di.AppInjector;
 import timber.log.Timber;
 
 /**
  * @author tobennaezike
  */
-public class WeatherApplication extends MultiDexApplication implements HasActivityInjector {
+public class WeatherApplication extends MultiDexApplication  {
+    private static WeatherApplication mInstance;
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
 
-    @Inject
-    DispatchingAndroidInjector<Activity> dispatchingAndroidInjector;
 
     @Override
     public void onCreate() {
-
-        AppInjector.init(this);
-
         super.onCreate();
-        if (BuildConfig.DEBUG) {
-            Timber.plant(new Timber.DebugTree());
-        }
-
-        AndroidThreeTen.init(this);
-
+        mInstance = this;
 
     }
-
-    @Override
-    public AndroidInjector<Activity> activityInjector() {
-        return dispatchingAndroidInjector;
+    public static synchronized WeatherApplication getInstance() {
+        return mInstance;
     }
 }

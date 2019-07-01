@@ -1,0 +1,106 @@
+{
+  "project_info": {
+    "project_number": "137896965462",
+    "firebase_url": "https://todotaskapp-f9e7b.firebaseio.com",
+    "project_id": "todotaskapp-f9e7b",
+    "storage_bucket": "todotaskapp-f9e7b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:137896965462:android:13e5a3b76b630eba",
+        "android_client_info": {
+          "package_name": "app.android.com.weatherapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "137896965462-mqkf482bf60tjednjkasac27en2n5tqe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxjPYKdBwaZsCknVpLHL_xrW5LraD43Jk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "137896965462-mqkf482bf60tjednjkasac27en2n5tqe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:137896965462:android:c1cb22fc6fe862e8",
+        "android_client_info": {
+          "package_name": "com.gehad.todotask"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "137896965462-ka6ei834vic2l14qbm50p3i2fmpda8u9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gehad.todotask",
+            "certificate_hash": "e41486cfc2ac00d509e79d65cef02ea836a0ce9f"
+          }
+        },
+        {
+          "client_id": "137896965462-mqkf482bf60tjednjkasac27en2n5tqe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxjPYKdBwaZsCknVpLHL_xrW5LraD43Jk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "137896965462-mqkf482bf60tjednjkasac27en2n5tqe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:137896965462:android:e3212bb24c3c503f",
+        "android_client_info": {
+          "package_name": "godaa.android.com.weathertaskapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "137896965462-mqkf482bf60tjednjkasac27en2n5tqe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxjPYKdBwaZsCknVpLHL_xrW5LraD43Jk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "137896965462-mqkf482bf60tjednjkasac27en2n5tqe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -7,55 +7,66 @@ import java.util.Objects;
 
 
 public class Resource<T> {
-
+    public static final String STATUS_SUCCESS = "SUCCESS";
+    public static final String STATUS_ERROR = "ERROR";
+    public static final String STATUS_LOADING = "LOADING";
     @NonNull
-    public final Status status;
+    private final boolean hasConnection;
+    @NonNull
+    private final String status;
     @Nullable
-    public final T data;
+    private final T data;
     @Nullable
-    public final String message;
+    private final String message;
 
-    private Resource(@NonNull Status status, @Nullable T data,
-                     @Nullable String message) {
+    private Resource(@NonNull String status, @Nullable T data, @Nullable String message, boolean hasConnection) {
         this.status = status;
         this.data = data;
         this.message = message;
+        this.hasConnection = hasConnection;
     }
 
-    /**
-     * Creates [Resource] object with `SUCCESS` status and [data].
-     */
-    public static <T> Resource<T> success(@NonNull T data) {
-        return new Resource<>(Status.SUCCESS, data, null);
+    private Resource(Resource resource, T data) {
+        this.data = data;
+        this.status = resource.status;
+        this.message = resource.message;
+        this.hasConnection = resource.hasConnection;
     }
 
-    /**
-     * Creates [Resource] object with `ERROR` status and [message].
-     */
+    public static <T> Resource<T> success(T data, boolean hasConnection) {
+        return new Resource<>(STATUS_SUCCESS, data, null, hasConnection);
+    }
+
     public static <T> Resource<T> error(String msg, @Nullable T data) {
-        return new Resource<>(Status.ERROR, data, msg);
+        return new Resource<>(STATUS_ERROR, data, msg, false);
     }
 
-    /**
-     * Creates [Resource] object with `LOADING` status to notify
-     * the UI to show loading.
-     */
     public static <T> Resource<T> loading(@Nullable T data) {
-        return new Resource<>(Status.LOADING, data, null);
+        return new Resource<>(STATUS_LOADING, data, null, false);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Resource)) return false;
-        Resource<?> resource = (Resource<?>) o;
-        return status == resource.status &&
-                Objects.equals(data, resource.data) &&
-                Objects.equals(message, resource.message);
+    public static <T> Resource<T> replace(@Nullable Resource resource, T data) {
+        return new Resource<T>(resource, data);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(status, data, message);
+
+    @NonNull
+    public boolean isHasConnection() {
+        return hasConnection;
+    }
+
+    @NonNull
+    public String getStatus() {
+        return status;
+    }
+
+    @Nullable
+    public T getData() {
+        return data;
+    }
+
+    @Nullable
+    public String getMessage() {
+        return message;
     }
 }
