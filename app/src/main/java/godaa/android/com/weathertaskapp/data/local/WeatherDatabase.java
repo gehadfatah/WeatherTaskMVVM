@@ -10,7 +10,7 @@ import godaa.android.com.weathertaskapp.WeatherApplication;
 import godaa.android.com.weathertaskapp.data.local.entity.AccuWeatherDb;
 import godaa.android.com.weathertaskapp.data.model.DailyForecast;
 
-@Database(entities = {AccuWeatherDb.class, DailyForecast.class}, version = 1, exportSchema = false)
+@Database(entities = {AccuWeatherDb.class}, version = 1, exportSchema = false)
 @TypeConverters({WeatherTypeConverter.class})
 public abstract class WeatherDatabase extends RoomDatabase {
 

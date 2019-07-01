@@ -28,8 +28,8 @@ public class WeatherViewModel extends ViewModel {
         return weatherRepository.getWeather();
     }
 
-    public LiveData<List<LocationSearchModel>> getRemoteListCitiesWeather(String location) {
-        return weatherRepository.getRemoteListCitiesWeather(location);
+    public LiveData<List<LocationSearchModel>> getRemoteListCitiesWeather(String q) {
+        return weatherRepository.getRemoteListCitiesWeather(q);
     }
 
     public LiveData<AccuWeatherModel> getRemotegetAccuWeatherData(String cityKey) {

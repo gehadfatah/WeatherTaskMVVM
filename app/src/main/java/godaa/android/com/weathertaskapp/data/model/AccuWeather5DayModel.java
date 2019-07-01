@@ -81,9 +81,7 @@ public class AccuWeather5DayModel implements Parcelable {
         @SerializedName("Night")
         @Expose
         private Night night;
-        @SerializedName("Sources")
-        @Expose
-        private List<String> sources = null;
+
         @SerializedName("MobileLink")
         @Expose
         private String mobileLink;
@@ -97,7 +95,7 @@ public class AccuWeather5DayModel implements Parcelable {
             temperature = in.readParcelable(Temperature.class.getClassLoader());
             day = in.readParcelable(Day.class.getClassLoader());
             night = in.readParcelable(Night.class.getClassLoader());
-            sources = in.createStringArrayList();
+            //sources = in.createStringArrayList();
             mobileLink = in.readString();
             link = in.readString();
         }
@@ -154,13 +152,7 @@ public class AccuWeather5DayModel implements Parcelable {
             this.night = night;
         }
 
-        public List<String> getSources() {
-            return sources;
-        }
 
-        public void setSources(List<String> sources) {
-            this.sources = sources;
-        }
 
         public String getMobileLink() {
             return mobileLink;
@@ -190,7 +182,7 @@ public class AccuWeather5DayModel implements Parcelable {
             dest.writeParcelable(temperature, flags);
             dest.writeParcelable(day, flags);
             dest.writeParcelable(night, flags);
-            dest.writeStringList(sources);
+           // dest.writeStringList(sources);
             dest.writeString(mobileLink);
             dest.writeString(link);
         }

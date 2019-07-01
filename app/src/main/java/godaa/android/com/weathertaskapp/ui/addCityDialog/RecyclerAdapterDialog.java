@@ -1,4 +1,4 @@
-package godaa.android.com.weathertaskapp.ui.dialog;
+package godaa.android.com.weathertaskapp.ui.addCityDialog;
 
 import android.content.Context;
 import android.view.LayoutInflater;

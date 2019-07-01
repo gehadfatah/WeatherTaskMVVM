@@ -38,7 +38,7 @@ public abstract class BaseFragmentList extends Fragment {
 
     public abstract void onCreateView(View view, Bundle savedInstanceState);
 
-    protected abstract void setUpObservers();
+    public abstract void setUpObservers();
 
     public abstract int getLayoutId();
 

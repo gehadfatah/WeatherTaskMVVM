@@ -1,5 +1,6 @@
 package godaa.android.com.weathertaskapp.data.local.entity;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.Embedded;
 import androidx.room.Entity;
@@ -16,28 +17,59 @@ import godaa.android.com.weathertaskapp.data.model.AccuWeatherModel;
 
 public class AccuWeatherDb {
     @PrimaryKey(autoGenerate = true)
+    @NonNull
     private long id;
 
     private String weatherText;
-    private String location;
+    private String city;
+    private String country;
     private int weatherIcon;
 
     private List<AccuWeather5DayModel.DailyForecast> dailyForecasts;
-    @Embedded
-    private AccuWeatherModel.Temperature temperature;
-
+    private double temperature;
+    @NonNull
+    public long getId() {
+        return id;
+    }
     public String getWeatherText() {
         return weatherText;
     }
-    public String getLocation() {
-        return location;
-    }
 
+    public void setWeatherText(String weatherText) {
+        this.weatherText = weatherText;
+
+    }
+    public void setWeatherIcon(int weatherIcon) {
+        this.weatherIcon = weatherIcon;
+
+    }
+    public void setDailyForecasts(List<AccuWeather5DayModel.DailyForecast> dailyForecasts) {
+        this.dailyForecasts = dailyForecasts;
+
+    }
+    public void setCountry(String country) {
+        this.country = country;
+
+    }
+    public void setCity(String city) {
+        this.city = city;
+
+    }
+    public void setTemperature(double temperature) {
+        this.temperature = temperature;
+
+    }
+    public String getCity() {
+        return city;
+    }
+    public String getCountry() {
+        return country;
+    }
     public int getWeatherIcon() {
         return weatherIcon;
     }
 
-    public AccuWeatherModel.Temperature getTemperature() {
+    public double getTemperature() {
         return temperature;
     }
 
@@ -50,12 +82,17 @@ public class AccuWeatherDb {
     public AccuWeatherDb() {
         super();
     }
-    public AccuWeatherDb(String weatherText, String location, int weatherIcon, List<AccuWeather5DayModel.DailyForecast> dailyForecasts, @Nullable AccuWeatherModel.Temperature temperature) {
+    public AccuWeatherDb(String weatherText, String city,String country, int weatherIcon, List<AccuWeather5DayModel.DailyForecast> dailyForecasts, @Nullable double temperature) {
         this.weatherText = weatherText;
-        this.location = location;
+        this.city = city;
+        this.country = country;
         this.weatherIcon = weatherIcon;
         this.dailyForecasts = dailyForecasts;
         this.temperature = temperature;
 
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
+//apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 28
@@ -37,8 +38,13 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     //Room
-    implementation 'androidx.room:room-runtime:2.1.0'
-    implementation 'androidx.room:room-rxjava2:2.1.0'
+    //implementation 'androidx.room:room-runtime:2.1.0'
+    implementation "androidx.room:room-rxjava2:$rootProject.roomVersion"
+
+    implementation "androidx.room:room-runtime:$rootProject.roomVersion"
+    implementation "androidx.room:room-ktx:$rootProject.roomVersion"
+    annotationProcessor "androidx.room:room-compiler:$rootProject.roomVersion"
+    androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
 
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'

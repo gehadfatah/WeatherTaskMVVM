@@ -15,10 +15,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //if this the first launch
-        if (savedInstanceState == null) {
-            replaceFragment(WeatherCitiesFragment.class, WeatherCitiesFragment.TAG);
-        }
+       // if (savedInstanceState == null) {
+     //   }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        replaceFragment(WeatherCitiesFragment.class, WeatherCitiesFragment.TAG);
+
+    }
+
     public void replaceFragment(Class<?> fragmentClass, String tag) {
 
         //if it the same running fragment do nothing

@@ -28,7 +28,7 @@ ext {
     daggerVersion = '2.10'
     butterKnifeVersion = '8.6.0'
     stethoVersion = '1.5.0'
-    roomVersion = '1.0.0-alpha6'
+    roomVersion = '2.1.0'
     leakCanary = '1.5.1'
     location_version = "16.0.0"
     threetenabp_version = "1.2.0"

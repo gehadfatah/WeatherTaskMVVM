@@ -10,6 +10,8 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
+import androidx.lifecycle.LifecycleOwner;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,7 @@ import godaa.android.com.weathertaskapp.MainActivity;
 import godaa.android.com.weathertaskapp.R;
 import godaa.android.com.weathertaskapp.WeatherViewModel;
 import godaa.android.com.weathertaskapp.data.model.LocationSearchModel;
+import godaa.android.com.weathertaskapp.data.remote.api.APIClient;
 import godaa.android.com.weathertaskapp.data.remote.api.ApiService;
 import godaa.android.com.weathertaskapp.ui.interfaces.IWeatherApi;
 import retrofit2.Call;
@@ -24,16 +27,18 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class AutoCompleteAdapter extends BaseAdapter implements Filterable {
+public class AutoCompleteAdapter2 extends BaseAdapter implements Filterable {
 
     private List<LocationSearchModel> mResultList = new ArrayList<>();
     private String BASE_URL_ACCU_WEATHER = "http://api.accuweather.com/";
     private Context mContext;
     WeatherViewModel mViewModel;
     Activity activity;
+    LifecycleOwner owner;
 
-    public AutoCompleteAdapter(Context mContext, WeatherViewModel mViewModel) {
+    public AutoCompleteAdapter2(Context mContext, LifecycleOwner owner, WeatherViewModel mViewModel) {
         this.mContext = mContext;
+        this.owner = owner;
         activity = (Activity) mContext;
         this.mViewModel = mViewModel;
     }
@@ -77,7 +82,7 @@ public class AutoCompleteAdapter extends BaseAdapter implements Filterable {
             protected FilterResults performFiltering(CharSequence charSequence) {
                 FilterResults filterResults = new FilterResults();
                 if (charSequence != null) {
-                    mViewModel.getRemoteListCitiesWeather(charSequence.toString()).observe(((MainActivity)activity), locationSearchModels -> {
+                 /*   mViewModel.getRemoteListCitiesWeather(charSequence.toString()).observe(owner, locationSearchModels -> {
                         if (locationSearchModels != null) {
                             if (!locationSearchModels.isEmpty()) {
                                 mResultList.clear();
@@ -90,6 +95,43 @@ public class AutoCompleteAdapter extends BaseAdapter implements Filterable {
                         } else {
                             mResultList.clear();
                             publishResults(charSequence, filterResults);
+                        }
+                    });*/
+                    /*      List<LocationSearchModel> locationSearchModels = observerCallback.setObserver(charSequence);
+                        if (locationSearchModels != null) {
+                            if (!locationSearchModels.isEmpty()) {
+                                mResultList.clear();
+                                mResultList.addAll(locationSearchModels);
+                                filterResults.values = mResultList;
+                                filterResults.count = mResultList.size();
+                                publishResults(charSequence, filterResults);
+                            }
+
+                        } else {
+                            mResultList.clear();
+                            publishResults(charSequence, filterResults);
+                        }*/
+                    Call<List<LocationSearchModel>> call = APIClient.getWeatherAPI().getAccuWeatherCities(charSequence.toString());
+                    call.enqueue(new Callback<List<LocationSearchModel>>() {
+                        @Override
+                        public void onResponse(Call<List<LocationSearchModel>> call, Response<List<LocationSearchModel>> response) {
+                            if (response.body() != null) {
+                                if (!response.body().isEmpty()) {
+                                    mResultList.clear();
+                                    mResultList.addAll(response.body());
+                                    filterResults.values = mResultList;
+                                    filterResults.count = mResultList.size();
+                                    publishResults(charSequence, filterResults);
+                                }
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<List<LocationSearchModel>> call, Throwable t) {
+                            mResultList.clear();
+                            publishResults(charSequence, filterResults);
+
                         }
                     });
 
