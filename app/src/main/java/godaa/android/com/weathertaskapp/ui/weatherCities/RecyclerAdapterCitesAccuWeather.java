@@ -52,7 +52,7 @@ public class RecyclerAdapterCitesAccuWeather extends RecyclerView.Adapter<Recycl
 
         LocationSearchModel locationSearchModel = locationSearchModelArrayList.get(position);
         AccuWeatherModel accuWeatherModel = accuWeatherModels.get(position);
-        if (position == 0 && !locationSearchModel.getKey().equals("328328") || position == 1 ) {
+        if ((position == 0 &&locationSearchModel.getKey()!=null&& !locationSearchModel.getKey().equals("328328") )|| position == 1 ) {
             iSuccesFirstWeather.successWeather(accuWeatherModel);
         }
         holder.tv_city_name.setText(locationSearchModel.getLocalizedName());

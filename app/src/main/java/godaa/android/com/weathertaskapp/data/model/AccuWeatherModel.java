@@ -188,7 +188,7 @@ public class AccuWeatherModel {
     }
 
 
-    public class Metric {
+    public static class Metric {
 
         @SerializedName("Value")
         @Expose
@@ -227,7 +227,7 @@ public class AccuWeatherModel {
     }
 
 
-    public class Temperature {
+    public static class Temperature {
 
         @SerializedName("Metric")
         @Expose
@@ -235,6 +235,10 @@ public class AccuWeatherModel {
         @SerializedName("Imperial")
         @Expose
         private Imperial imperial;
+
+        public Temperature() {
+            super();
+        }
 
         public Metric getMetric() {
             return metric;

@@ -24,6 +24,10 @@ public class AccuWeather5DayModel implements Parcelable {
 
     }
 
+    public AccuWeather5DayModel() {
+        super();
+    }
+
     public static final Creator<AccuWeather5DayModel> CREATOR = new Creator<AccuWeather5DayModel>() {
         @Override
         public AccuWeather5DayModel createFromParcel(Parcel in) {

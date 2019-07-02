@@ -43,6 +43,7 @@ import godaa.android.com.weathertaskapp.ui.interfaces.IWeatherApi;
 import godaa.android.com.weathertaskapp.ui.interfaces.NavigateTo;
 import godaa.android.com.weathertaskapp.ui.interfaces.ObserverCallback;
 import godaa.android.com.weathertaskapp.utils.ItemOffsetDecoration;
+import godaa.android.com.weathertaskapp.utils.Utilities;
 import godaa.android.com.weathertaskapp.utils.ViewModelFactory;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -96,9 +97,41 @@ public class WeatherCitiesFragment extends BaseFragmentList implements ISuccesRe
 
     @Override
     public void setUpObservers() {
+
         mViewModel.getAccuWeatherDbLiveData().observe(this, accuWeatherDbs -> {
-            if (accuWeatherDbs.size() > 0)
-                accuWeatherDbs.get(0);
+            if (getActivity() != null && !Utilities.isOnline(getActivity())) {
+                cities.clear();
+                accuWeatherModelcities.clear();
+                AccuWeather5DayModelcities.clear();
+                for (AccuWeatherDb accuWeatherDb :
+                        accuWeatherDbs
+                ) {
+
+                    LocationSearchModel locationSearchModel = new LocationSearchModel();
+                    LocationSearchModel.Country country = new LocationSearchModel.Country();
+                    country.setID(accuWeatherDb.getCountry());
+                    country.setLocalizedName(accuWeatherDb.getCity());
+                    locationSearchModel.setCountry(country);
+                    locationSearchModel.setKey(accuWeatherDb.getKeyLocation());
+                    cities.add(locationSearchModel);
+
+                    AccuWeatherModel accuWeatherModel = new AccuWeatherModel();
+                    AccuWeatherModel.Temperature temperature = new AccuWeatherModel.Temperature();
+                    AccuWeatherModel.Metric metric = new AccuWeatherModel.Metric();
+                    metric.setValue(accuWeatherDb.getTemperature());
+                    temperature.setMetric(metric);
+                    accuWeatherModel.setWeatherText(accuWeatherDb.getWeatherText());
+                    accuWeatherModel.setTemperature(temperature);
+                    accuWeatherModel.setWeatherIcon(accuWeatherDb.getWeatherIcon());
+                    accuWeatherModelcities.add(accuWeatherModel);
+
+                    AccuWeather5DayModel accuWeather5DayModel = new AccuWeather5DayModel();
+                    accuWeather5DayModel.setDailyForecasts(accuWeatherDb.getDailyForecasts());
+                    AccuWeather5DayModelcities.add(accuWeather5DayModel);
+
+                }
+                adapterCitesAccuWeather.notifyDataSetChanged();
+            }
 
         });
     }
@@ -204,7 +237,7 @@ public class WeatherCitiesFragment extends BaseFragmentList implements ISuccesRe
     }
 
     private void insertNewWeatherCityToLocal(AccuWeather5DayModel accuWeather5DayModel, AccuWeatherModel accuWeatherModel, LocationSearchModel locationSearchModel) {
-        AccuWeatherDb accuWeatherDb = new AccuWeatherDb(accuWeatherModel.getWeatherText(), locationSearchModel.getLocalizedName(), locationSearchModel.getCountry().getID(), accuWeatherModel.getWeatherIcon(), accuWeather5DayModel.getDailyForecasts(), accuWeatherModel.getTemperature().getMetric().getValue());
+        AccuWeatherDb accuWeatherDb = new AccuWeatherDb(accuWeatherModel.getWeatherText(), locationSearchModel.getLocalizedName(), locationSearchModel.getCountry().getID(),locationSearchModel.getKey(), accuWeatherModel.getWeatherIcon(), accuWeather5DayModel.getDailyForecasts(), accuWeatherModel.getTemperature().getMetric().getValue());
         mViewModel.insertWeatherCity(accuWeatherDb);
 
     }
