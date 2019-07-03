@@ -112,6 +112,7 @@ public class WeatherCitiesFragment extends BaseFragmentList implements ISuccesRe
                     country.setID(accuWeatherDb.getCountry());
                     country.setLocalizedName(accuWeatherDb.getCity());
                     locationSearchModel.setCountry(country);
+                    locationSearchModel.setLocalizedName(accuWeatherDb.getCity());
                     locationSearchModel.setKey(accuWeatherDb.getKeyLocation());
                     cities.add(locationSearchModel);
 
