@@ -17,6 +17,9 @@ import godaa.android.com.weathertaskapp.data.model.AccuWeather5DayModel;
 import godaa.android.com.weathertaskapp.data.model.AccuWeatherModel;
 import godaa.android.com.weathertaskapp.data.model.LocationSearchModel;
 import godaa.android.com.weathertaskapp.data.remote.api.ApiService;
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
+import io.reactivex.Single;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -31,11 +34,15 @@ public class WeatherRepository {
         this.remote = remote;
     }
 
-    public LiveData<List<AccuWeatherDb>> getWeather() {
+    public Flowable<List<AccuWeatherDb>> getWeather() {
         return local.getWeather();
     }
 
-    public LiveData<List<LocationSearchModel>> getRemoteListCitiesWeather(String q) {
+    public Flowable<List<LocationSearchModel>> getRemoteListCitiesWeather(String q) {
+        return remote.getAccuWeatherCities(q);
+    }
+
+    /*public LiveData<List<LocationSearchModel>> getRemoteListCitiesWeather(String q) {
         final MutableLiveData<List<LocationSearchModel>> data = new MutableLiveData<>();
         remote.getAccuWeatherCities(q)
                 .enqueue(new Callback<List<LocationSearchModel>>() {
@@ -55,8 +62,12 @@ public class WeatherRepository {
                 });
         return data;
     }
+*/
+    public Flowable<List<AccuWeatherModel>> getRemotegetAccuWeatherData(String cityKey) {
+        return remote.getAccuWeatherData(cityKey);
+    }
 
-    public LiveData<AccuWeatherModel> getRemotegetAccuWeatherData(String cityKey) {
+    /*public LiveData<AccuWeatherModel> getRemotegetAccuWeatherData(String cityKey) {
         final MutableLiveData<AccuWeatherModel> data = new MutableLiveData<>();
         remote.getAccuWeatherData(cityKey)
                 .enqueue(new Callback<List<AccuWeatherModel>>() {
@@ -94,8 +105,18 @@ public class WeatherRepository {
 
 
     }
+*/
+    public Single<AccuWeather5DayModel> getAccuWeatherData5days(String cityKey) {
+        return remote.getAccuWeatherData5days(cityKey);
+    }
 
-    public void insertWeatherCity(AccuWeatherDb weatherDb) {
+    public Observable<Boolean> insertWeatherCity(final AccuWeatherDb weatherDb) {
+        return Observable.fromCallable(() -> {
+            local.insertAll(weatherDb);
+            return true;
+        });
+    }
+  /*  public void insertWeatherCity(AccuWeatherDb weatherDb) {
         Executor executor = Executors.newSingleThreadExecutor();
         executor.execute(new Runnable() {
             @Override
@@ -105,7 +126,7 @@ public class WeatherRepository {
 
             }
         });
-    }
+    }*/
 
     public void clearAllData() {
         local.clearAllData();

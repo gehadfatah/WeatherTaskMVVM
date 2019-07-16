@@ -15,13 +15,10 @@ import androidx.lifecycle.LifecycleOwner;
 import java.util.ArrayList;
 import java.util.List;
 
-import godaa.android.com.weathertaskapp.MainActivity;
 import godaa.android.com.weathertaskapp.R;
-import godaa.android.com.weathertaskapp.WeatherViewModel;
+import godaa.android.com.weathertaskapp.ui.WeatherViewModel;
 import godaa.android.com.weathertaskapp.data.model.LocationSearchModel;
 import godaa.android.com.weathertaskapp.data.remote.api.APIClient;
-import godaa.android.com.weathertaskapp.data.remote.api.ApiService;
-import godaa.android.com.weathertaskapp.ui.interfaces.IWeatherApi;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

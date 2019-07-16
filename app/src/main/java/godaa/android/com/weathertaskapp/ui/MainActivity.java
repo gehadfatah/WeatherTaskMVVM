@@ -1,10 +1,11 @@
-package godaa.android.com.weathertaskapp;
+package godaa.android.com.weathertaskapp.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
 
+import godaa.android.com.weathertaskapp.R;
 import godaa.android.com.weathertaskapp.ui.weatherCities.WeatherCitiesFragment;
 
 public class MainActivity extends AppCompatActivity {
