@@ -2,12 +2,13 @@ package godaa.android.com.weathertaskapp.data.remote.api;
 
 import java.util.concurrent.TimeUnit;
 
-import godaa.android.com.weathertaskapp.data.remote.APIKeyInterceptor;
-import godaa.android.com.weathertaskapp.data.remote.LiveDataCallAdapterFactory;
+import godaa.android.com.weathertaskapp.data.remote.interceptors.APIKeyInterceptor;
+import godaa.android.com.weathertaskapp.data.remote.interceptors.LiveDataCallAdapterFactory;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.CallAdapter;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class APIClient {
@@ -48,6 +49,7 @@ public class APIClient {
                 .baseUrl(getInstance().settings.getBaseURL())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(buildCallAdapterFactory())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(getInstance().getHttpClient())
                 .build()
                 .create(ApiService.class);

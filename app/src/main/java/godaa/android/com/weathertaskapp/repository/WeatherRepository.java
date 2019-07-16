@@ -38,9 +38,9 @@ public class WeatherRepository {
         return local.getWeather();
     }
 
-    public Flowable<List<LocationSearchModel>> getRemoteListCitiesWeather(String q) {
+    /*public Flowable<List<LocationSearchModel>> getRemoteListCitiesWeather(String q) {
         return remote.getAccuWeatherCities(q);
-    }
+    }*/
 
     /*public LiveData<List<LocationSearchModel>> getRemoteListCitiesWeather(String q) {
         final MutableLiveData<List<LocationSearchModel>> data = new MutableLiveData<>();

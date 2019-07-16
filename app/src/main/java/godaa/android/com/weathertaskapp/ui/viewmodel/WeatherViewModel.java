@@ -1,4 +1,4 @@
-package godaa.android.com.weathertaskapp.ui;
+package godaa.android.com.weathertaskapp.ui.viewmodel;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -27,11 +27,11 @@ import io.reactivex.functions.Consumer;
 
 public class WeatherViewModel extends BaseViewModel {
     WeatherRepository weatherRepository;
-    private MutableLiveData<AccuDbInsertViewState> accuDbInsertViewStateMutableLiveData;
-    private MutableLiveData<WeatherDbModelsViewState> weatherDbModelsViewStateMutableLiveData;
-    private MutableLiveData<AccuWeatherModelViewState> accuWeatherModelViewStateMutableLiveData;
-    private MutableLiveData<WeatherCitiesViewState> locationSearchModelsLiveData;
-    private MutableLiveData<Accu5DayWeatherModelViewState> accu5DayWeatherModelViewStateMutableLiveData;
+    private MutableLiveData<AccuDbInsertViewState> accuDbInsertViewStateMutableLiveData=new MutableLiveData<>();
+    private MutableLiveData<WeatherDbModelsViewState> weatherDbModelsViewStateMutableLiveData=new MutableLiveData<>();
+    private MutableLiveData<AccuWeatherModelViewState> accuWeatherModelViewStateMutableLiveData=new MutableLiveData<>();
+    private MutableLiveData<WeatherCitiesViewState> locationSearchModelsLiveData=new MutableLiveData<>();
+    private MutableLiveData<Accu5DayWeatherModelViewState> accu5DayWeatherModelViewStateMutableLiveData=new MutableLiveData<>();
 
     public WeatherViewModel(Scheduler subscribeOn, Scheduler observeOn, WeatherRepository weatherRepository) {
         super(subscribeOn, observeOn);
@@ -62,7 +62,7 @@ public class WeatherViewModel extends BaseViewModel {
 
         return weatherDbModelsViewStateMutableLiveData;
     }
-    public LiveData<WeatherCitiesViewState> getRemoteListCitiesWeather(String q) {
+   /* public LiveData<WeatherCitiesViewState> getRemoteListCitiesWeather(String q) {
         // return weatherRepository.getWeather();
         WeatherCitiesViewState weatherCitiesViewState = new WeatherCitiesViewState();
         execute(
@@ -83,10 +83,8 @@ public class WeatherViewModel extends BaseViewModel {
         );
 
         return locationSearchModelsLiveData;
-    }
-   /* public LiveData<List<LocationSearchModel>> getRemoteListCitiesWeather(String q) {
-        return weatherRepository.getRemoteListCitiesWeather(q);
     }*/
+
 
     public LiveData<AccuWeatherModelViewState> getRemotegetAccuWeatherData(String cityKey) {
        // return weatherRepository.getRemotegetAccuWeatherData(cityKey);

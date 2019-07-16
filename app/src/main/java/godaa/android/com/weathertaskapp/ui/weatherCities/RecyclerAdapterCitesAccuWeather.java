@@ -21,6 +21,7 @@ import butterknife.ButterKnife;
 import godaa.android.com.weathertaskapp.R;
 import godaa.android.com.weathertaskapp.data.model.AccuWeatherModel;
 import godaa.android.com.weathertaskapp.data.model.LocationSearchModel;
+import godaa.android.com.weathertaskapp.ui.detailWeather.DetailsActivity;
 import godaa.android.com.weathertaskapp.ui.interfaces.ISuccesFirstWeather;
 import godaa.android.com.weathertaskapp.ui.interfaces.NavigateTo;
 
@@ -52,7 +53,7 @@ public class RecyclerAdapterCitesAccuWeather extends RecyclerView.Adapter<Recycl
 
         LocationSearchModel locationSearchModel = locationSearchModelArrayList.get(position);
         AccuWeatherModel accuWeatherModel = accuWeatherModels.get(position);
-        if (position == 0 && !locationSearchModel.getKey().equals("328328") || position == 1 ) {
+        if ((position == 0 &&locationSearchModel.getKey()!=null&& !locationSearchModel.getKey().equals("328328") )|| position == 1 ) {
             iSuccesFirstWeather.successWeather(accuWeatherModel);
         }
         holder.tv_city_name.setText(locationSearchModel.getLocalizedName());
@@ -62,7 +63,7 @@ public class RecyclerAdapterCitesAccuWeather extends RecyclerView.Adapter<Recycl
         holder.linLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // navigateTo.navigate(DetailsActivity.class, position);
+                navigateTo.navigate(DetailsActivity.class, position);
             }
         });
         Glide.with(mContext)

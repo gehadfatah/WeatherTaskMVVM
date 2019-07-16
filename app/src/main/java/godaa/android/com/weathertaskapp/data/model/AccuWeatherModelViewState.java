@@ -3,7 +3,7 @@ package godaa.android.com.weathertaskapp.data.model;
 
 import java.util.List;
 
-public class AccuWeatherModelViewState {
+public class AccuWeatherModelViewState  {
 
     private NetworkState networkState;
     private List<AccuWeatherModel> accuWeatherModels;

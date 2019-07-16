@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layoutDirection="ltr"
+
+    android:background="@drawable/border_white"
+  >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_white"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_weight=".5"
+            android:background="@drawable/border_white">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="@dimen/padding_xxxx"
+                android:layout_marginLeft="@dimen/padding_xxxx"
+                android:layout_marginStart="@dimen/padding_xxxx"
+                android:text="@string/exitText"
+                android:textColor="@color/black_effective"
+                android:textSize="@dimen/textSize_10sp" />
+        </FrameLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_weight=".5">
+
+            <TextView
+                android:id="@+id/existYesTV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight=".5"
+                android:background="@drawable/left_radius_white"
+                android:gravity="center"
+                android:text="Yes"
+                android:textColor="@color/black_effective"
+                android:textSize="@dimen/textSize_10sp"
+                tools:ignore="NestedWeights" />
+
+            <TextView
+                android:id="@+id/no"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight=".5"
+                android:background="@drawable/weather_gradiant"
+                android:gravity="center"
+                android:lines="2"
+                android:padding="@dimen/padding_x"
+                android:text="No"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/textSize_10sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+</RelativeLayout>

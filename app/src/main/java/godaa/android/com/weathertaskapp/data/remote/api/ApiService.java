@@ -23,7 +23,7 @@ public interface ApiService {
     @GET("currentconditions/v1/{key}")
     Flowable<List<AccuWeatherModel>> getAccuWeatherData(@Path("key") String cityKey/*, @Query("apikey") String appId*/);
     @GET("locations/v1/cities/autocomplete")
-    Flowable<List<LocationSearchModel>> getAccuWeatherCities(/*@Query("apikey") String appId,*/ @Query("q") String query);
+    Call<List<LocationSearchModel>> getAccuWeatherCities(/*@Query("apikey") String appId,*/ @Query("q") String query);
     @GET("forecasts/v1/daily/5day/{key}?metric=true")
     Single<AccuWeather5DayModel> getAccuWeatherData5days(@Path("key") String cityKey);
 

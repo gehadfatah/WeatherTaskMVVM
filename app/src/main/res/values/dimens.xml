@@ -1,4 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="item_offset">10dp</dimen>
+    <!--padding-->
+    <dimen name="padding_">1dp</dimen>
+    <dimen name="padding_x">3dp</dimen>
+    <dimen name="padding_xx">5dp</dimen>
+    <dimen name="padding_xxx">10dp</dimen>
+    <dimen name="padding_8">8dp</dimen>
+    <dimen name="padding_15">15dp</dimen>
+    <dimen name="padding_xxxx">20dp</dimen>
+    <dimen name="padding_xxxxx">25dp</dimen>
+    <dimen name="padding_30">30dp</dimen>
+    <!--String Size-->
+    <dimen name="textSize_26sp">26sp</dimen>
+    <dimen name="textSize_21sp">21sp</dimen>
+    <dimen name="textSize_18sp">18sp</dimen>
+    <dimen name="textSize_16sp">16sp</dimen>
+    <dimen name="textSize_17sp">17sp</dimen>
+    <dimen name="textSize_14sp">14sp</dimen>
+    <dimen name="textSize_15sp">15sp</dimen>
+    <dimen name="textSize_25sp">25sp</dimen>
+    <dimen name="textSize_12sp">12sp</dimen>
+    <dimen name="textSize_home_banner_tv_invisible">2.5sp</dimen>
+    <dimen name="textSize_home_banner_tv_visible">6sp</dimen>
+    <dimen name="textSize_11sp">11sp</dimen>
+    <dimen name="textSize_13sp">13sp</dimen>
+    <dimen name="textSize_CategoriesSp">14sp</dimen>
+    <dimen name="textSize_4re_sp">18sp</dimen>
+    <dimen name="textSize_4sp">16sp</dimen>
+    <dimen name="textSize_9sp">9sp</dimen>
+    <dimen name="textSize_8sp">8sp</dimen>
+    <dimen name="textSize_transaction_item">10sp</dimen>
+    <dimen name="textSize_transaction_item_large">14sp</dimen>
+    <dimen name="textSize_10sp">10sp</dimen>
+    <dimen name="size_home_item">10sp</dimen>
+    <dimen name="des_size_home_item">9sp</dimen>
+    <dimen name="title_size_home_item_large">13sp</dimen>
+    <dimen name="desc_size_home_item_large">11sp</dimen>
+    <dimen name="textSize_7sp">7sp</dimen>
+    <dimen name="textSize_6sp">6sp</dimen>
+    <dimen name="snashButtonRecommend">9sp</dimen>
+    <dimen name="snashFloating">10sp</dimen>
 </resources>

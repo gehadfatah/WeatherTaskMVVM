@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import godaa.android.com.weathertaskapp.ui.WeatherViewModel;
+import godaa.android.com.weathertaskapp.ui.viewmodel.WeatherViewModel;
 import godaa.android.com.weathertaskapp.repository.WeatherRepository;
 import io.reactivex.Scheduler;
 

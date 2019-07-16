@@ -1,4 +1,4 @@
-package godaa.android.com.weathertaskapp.data.remote;
+package godaa.android.com.weathertaskapp.data.remote.interceptors;
 
 import androidx.lifecycle.LiveData;
 

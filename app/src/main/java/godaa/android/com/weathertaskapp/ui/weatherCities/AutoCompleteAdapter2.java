@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import godaa.android.com.weathertaskapp.R;
-import godaa.android.com.weathertaskapp.ui.WeatherViewModel;
+import godaa.android.com.weathertaskapp.ui.viewmodel.WeatherViewModel;
 import godaa.android.com.weathertaskapp.data.model.LocationSearchModel;
 import godaa.android.com.weathertaskapp.data.remote.api.APIClient;
 import retrofit2.Call;

@@ -1,6 +1,7 @@
 package godaa.android.com.weathertaskapp.ui.weatherCities;
 
 import android.Manifest;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
@@ -11,17 +12,20 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import godaa.android.com.weathertaskapp.R;
+import godaa.android.com.weathertaskapp.WeatherApplication;
 import godaa.android.com.weathertaskapp.data.model.Accu5DayWeatherModelViewState;
 import godaa.android.com.weathertaskapp.data.model.AccuWeatherModelViewState;
-import godaa.android.com.weathertaskapp.data.model.ViewStatus;
 import godaa.android.com.weathertaskapp.data.model.WeatherDbModelsViewState;
-import godaa.android.com.weathertaskapp.ui.WeatherViewModel;
+import godaa.android.com.weathertaskapp.ui.MainActivity;
+import godaa.android.com.weathertaskapp.ui.detailWeather.DetailFragment;
+import godaa.android.com.weathertaskapp.ui.viewmodel.WeatherViewModel;
 import godaa.android.com.weathertaskapp.data.local.WeatherDatabase;
 import godaa.android.com.weathertaskapp.data.local.entity.AccuWeatherDb;
 import godaa.android.com.weathertaskapp.data.model.AccuWeather5DayModel;
@@ -38,13 +42,13 @@ import godaa.android.com.weathertaskapp.ui.interfaces.NavigateTo;
 import godaa.android.com.weathertaskapp.ui.interfaces.ObserverCallback;
 import godaa.android.com.weathertaskapp.utils.ActivityUtils;
 import godaa.android.com.weathertaskapp.utils.ItemOffsetDecoration;
+import godaa.android.com.weathertaskapp.utils.NetworkUtils;
+import godaa.android.com.weathertaskapp.utils.Utilities;
 import godaa.android.com.weathertaskapp.utils.ViewModelFactory;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-import static godaa.android.com.weathertaskapp.data.model.ViewStatus.RUNNING;
-
-public class WeatherCitiesFragment extends BaseFragmentList implements ISuccesReturnLocation, ObserverCallback, IAddCityResponse, ISuccesFirstWeather, NavigateTo, SwipeRefreshLayout.OnRefreshListener {
+public class WeatherCitiesFragment extends BaseFragmentList implements ISuccesReturnLocation, /*ObserverCallback, */IAddCityResponse, ISuccesFirstWeather, NavigateTo, SwipeRefreshLayout.OnRefreshListener {
 
     public static final String TAG = WeatherCitiesFragment.class.getSimpleName();
     private WeatherViewModel mViewModel;
@@ -97,17 +101,58 @@ public class WeatherCitiesFragment extends BaseFragmentList implements ISuccesRe
                 setweatherDbModelsViewState(weatherDbModelsViewState);
 
         });
+
     }
 
     private void setweatherDbModelsViewState(WeatherDbModelsViewState weatherDbModelsViewState) {
 
         switch (weatherDbModelsViewState.getNetworkState().getViewStatus()) {
             case RUNNING:
+                setLoading();
                 break;
             case SUCCESS:
+                setSuccess();
 
+                if (getActivity() != null && !Utilities.isOnline(getActivity())) {
+                    cities.clear();
+                    accuWeatherModelcities.clear();
+                    AccuWeather5DayModelcities.clear();
+                    for (AccuWeatherDb accuWeatherDb : weatherDbModelsViewState.getAccuWeatherModels()
+                    ) {
+
+                        LocationSearchModel locationSearchModel = new LocationSearchModel();
+                        LocationSearchModel.Country country = new LocationSearchModel.Country();
+                        country.setID(accuWeatherDb.getCountry());
+                        country.setLocalizedName(accuWeatherDb.getCity());
+                        locationSearchModel.setCountry(country);
+                        locationSearchModel.setLocalizedName(accuWeatherDb.getCity());
+                        locationSearchModel.setKey(accuWeatherDb.getKeyLocation());
+                        cities.add(locationSearchModel);
+
+                        AccuWeatherModel accuWeatherModel = new AccuWeatherModel();
+                        AccuWeatherModel.Temperature temperature = new AccuWeatherModel.Temperature();
+                        AccuWeatherModel.Metric metric = new AccuWeatherModel.Metric();
+                        metric.setValue(accuWeatherDb.getTemperature());
+                        temperature.setMetric(metric);
+                        accuWeatherModel.setWeatherText(accuWeatherDb.getWeatherText());
+                        accuWeatherModel.setTemperature(temperature);
+                        accuWeatherModel.setWeatherIcon(accuWeatherDb.getWeatherIcon());
+                        accuWeatherModelcities.add(accuWeatherModel);
+
+                        AccuWeather5DayModel accuWeather5DayModel = new AccuWeather5DayModel();
+                        accuWeather5DayModel.setDailyForecasts(accuWeatherDb.getDailyForecasts());
+                        AccuWeather5DayModelcities.add(accuWeather5DayModel);
+
+                    }
+                    adapterCitesAccuWeather.notifyDataSetChanged();
+
+                }
                 break;
             case FAILED:
+                setFailed(weatherDbModelsViewState);
+                Toast.makeText(getActivity(),
+                        weatherDbModelsViewState.getNetworkState().getMessage(),
+                        Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -134,8 +179,10 @@ public class WeatherCitiesFragment extends BaseFragmentList implements ISuccesRe
     private void setaccu5DayWeatherModelViewState(Accu5DayWeatherModelViewState accu5DayWeatherModelViewState) {
         switch (accu5DayWeatherModelViewState.getNetworkState().getViewStatus()) {
             case RUNNING:
+                setLoading();
                 break;
             case SUCCESS:
+                setSuccess();
                 maccuWeather5DayModel = accu5DayWeatherModelViewState.getAccuWeather5DayModel();
                 if (maccuWeatherModel == null) getSecond = false;
                 else getSecond = true;
@@ -148,15 +195,36 @@ public class WeatherCitiesFragment extends BaseFragmentList implements ISuccesRe
                 }
                 break;
             case FAILED:
+                setFailed(accu5DayWeatherModelViewState);
                 break;
         }
+    }
+
+    private <T> void setFailed(T viewState) {
+        progress_bar.setVisibility(View.GONE);
+       /* if (viewState instanceof AccuWeatherModelViewState)
+            Toast.makeText(getActivity(),
+                    ((AccuWeatherModelViewState)viewState).getNetworkState().getMessage(),
+                    Toast.LENGTH_SHORT).show();*/
+    }
+
+    private void setSuccess() {
+        ActivityUtils.setVisibility(View.GONE, noConnectionLayout, noDataLayout, progress_bar);
+
+    }
+
+    private void setLoading() {
+        progress_bar.setVisibility(View.VISIBLE);
+        ActivityUtils.setVisibility(View.GONE, noConnectionLayout, noDataLayout);
     }
 
     private void setaccuWeatherModelViewState(AccuWeatherModelViewState accuWeatherModelViewState) {
         switch (accuWeatherModelViewState.getNetworkState().getViewStatus()) {
             case RUNNING:
+                setLoading();
                 break;
             case SUCCESS:
+                setSuccess();
                 maccuWeatherModel = accuWeatherModelViewState.getAccuWeatherModels().get(0);
                 if (maccuWeather5DayModel == null) getSecond = false;
                 else getSecond = true;
@@ -168,6 +236,7 @@ public class WeatherCitiesFragment extends BaseFragmentList implements ISuccesRe
                 }
                 break;
             case FAILED:
+                setFailed(accuWeatherModelViewState);
                 break;
         }
     }
@@ -230,7 +299,7 @@ public class WeatherCitiesFragment extends BaseFragmentList implements ISuccesRe
     }
 
     private void insertNewWeatherCityToLocal(AccuWeather5DayModel accuWeather5DayModel, AccuWeatherModel accuWeatherModel, LocationSearchModel locationSearchModel) {
-        AccuWeatherDb accuWeatherDb = new AccuWeatherDb(accuWeatherModel.getWeatherText(), locationSearchModel.getLocalizedName(), locationSearchModel.getCountry().getID(), accuWeatherModel.getWeatherIcon(), accuWeather5DayModel.getDailyForecasts(), accuWeatherModel.getTemperature().getMetric().getValue());
+        AccuWeatherDb accuWeatherDb = new AccuWeatherDb(accuWeatherModel.getWeatherText(), locationSearchModel.getLocalizedName(), locationSearchModel.getCountry().getID(), locationSearchModel.getKey(), accuWeatherModel.getWeatherIcon(), accuWeather5DayModel.getDailyForecasts(), accuWeatherModel.getTemperature().getMetric().getValue());
         mViewModel.insertWeatherCity(accuWeatherDb);
 
     }
@@ -248,8 +317,16 @@ public class WeatherCitiesFragment extends BaseFragmentList implements ISuccesRe
 
     @Override
     public void navigate(Class aClass, int position) {
-
+      /*  if (AccuWeather5DayModelcities.size() > 0 && AccuWeather5DayModelcities.get(position) != null)
+            startActivity(new Intent(getActivity(), aClass).putExtra("weatherDetails", new Gson().toJson(AccuWeather5DayModelcities.get(position))));
+*/
+        if (AccuWeather5DayModelcities.size() > 0 && AccuWeather5DayModelcities.get(position) != null) {
+            Bundle bundle = new Bundle();
+            bundle.putString(getResources().getString(R.string.weatherDetails), new Gson().toJson(AccuWeather5DayModelcities.get(position)));
+            ((MainActivity) getActivity()).replaceFragment(DetailFragment.class, DetailFragment.TAG, bundle);
+        }
     }
+
 
     @Override
     public void successLocation(Location deviceLocation) {
@@ -261,19 +338,19 @@ public class WeatherCitiesFragment extends BaseFragmentList implements ISuccesRe
 
     }
 
-    @Override
+ /*   @Override
     public List<LocationSearchModel> setObserver(CharSequence charSequence) {
         final List<LocationSearchModel>[] locationSearchModels = new List[]{new ArrayList<>()};
         mViewModel.getRemoteListCitiesWeather(charSequence.toString()).observe(this, weatherCitiesViewState -> {
             if (weatherCitiesViewState != null)
-                if (weatherCitiesViewState.getNetworkState().getViewStatus() == ViewStatus.SUCCESS)
+                if (weatherCitiesViewState.getNetworkState().getViewStatus() == SUCCESS)
                     locationSearchModels[0] = weatherCitiesViewState.getLocationSearchModels();
 
 
         });
         return locationSearchModels[0];
 
-    }
+    }*/
 
 
 }

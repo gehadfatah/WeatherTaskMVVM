@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 
 import androidx.annotation.NonNull;
@@ -33,8 +34,9 @@ public abstract class BaseFragmentList extends Fragment {
     protected RecyclerView recyclerView;
     protected SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private View noDataLayout;
-    private View noConnectionLayout;
+    public View noDataLayout;
+    public View noConnectionLayout;
+    public ProgressBar progress_bar;
 
     public abstract void onCreateView(View view, Bundle savedInstanceState);
 
@@ -81,6 +83,7 @@ public abstract class BaseFragmentList extends Fragment {
         recyclerView = rootView.findViewById(R.id.recycler_view);
         noDataLayout = rootView.findViewById(R.id.no_data_layout);
         noConnectionLayout = rootView.findViewById(R.id.no_connection_layout);
+        progress_bar = rootView.findViewById(R.id.progress_bar);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
