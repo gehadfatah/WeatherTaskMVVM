@@ -2,6 +2,7 @@ package godaa.android.com.weathertaskapp.ui.viewmodel;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import org.reactivestreams.Subscription;
@@ -23,31 +24,38 @@ import godaa.android.com.weathertaskapp.ui.base.BaseViewModel;
 import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+import timber.log.Timber;
 
 public class WeatherViewModel extends BaseViewModel {
     WeatherRepository weatherRepository;
-    private MutableLiveData<AccuDbInsertViewState> accuDbInsertViewStateMutableLiveData=new MutableLiveData<>();
-    private MutableLiveData<WeatherDbModelsViewState> weatherDbModelsViewStateMutableLiveData=new MutableLiveData<>();
-    private MutableLiveData<AccuWeatherModelViewState> accuWeatherModelViewStateMutableLiveData=new MutableLiveData<>();
-    private MutableLiveData<WeatherCitiesViewState> locationSearchModelsLiveData=new MutableLiveData<>();
-    private MutableLiveData<Accu5DayWeatherModelViewState> accu5DayWeatherModelViewStateMutableLiveData=new MutableLiveData<>();
+    private MutableLiveData<AccuDbInsertViewState> accuDbInsertViewStateMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<WeatherDbModelsViewState> weatherDbModelsViewStateMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<AccuWeatherModelViewState> accuWeatherModelViewStateMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<WeatherCitiesViewState> locationSearchModelsLiveData = new MutableLiveData<>();
+    private MutableLiveData<Accu5DayWeatherModelViewState> accu5DayWeatherModelViewStateMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<Boolean> reloadTrigger = new MutableLiveData<Boolean>();
 
     public WeatherViewModel(Scheduler subscribeOn, Scheduler observeOn, WeatherRepository weatherRepository) {
         super(subscribeOn, observeOn);
-
         this.weatherRepository = weatherRepository;
+        refreshUsers();
 
     }
 
+    public void refreshUsers() {
+        reloadTrigger.setValue(true);
+    }
+
     public LiveData<WeatherDbModelsViewState> getAccuWeatherDbLiveData() {
-       // return weatherRepository.getWeather();
         WeatherDbModelsViewState weatherDbModelsViewState = new WeatherDbModelsViewState();
-        execute(
+        executeFlowable(
                 subscription -> {
                     weatherDbModelsViewState.setNetworkState(NetworkState.LOADING);
                     weatherDbModelsViewStateMutableLiveData.postValue(weatherDbModelsViewState);
                 },
+                //this list is same with retured getweather
                 accuWeatherDbList -> {
                     weatherDbModelsViewState.setNetworkState(NetworkState.LOADED);
                     weatherDbModelsViewState.setAccuWeatherModels(accuWeatherDbList);
@@ -57,9 +65,11 @@ public class WeatherViewModel extends BaseViewModel {
                     weatherDbModelsViewState.setNetworkState(NetworkState.error(throwable.getMessage()));
                     weatherDbModelsViewStateMutableLiveData.postValue(weatherDbModelsViewState);
                 },
-                weatherRepository.getWeather()
-        );
 
+             weatherRepository.getWeather()
+        );
+     /* return   Transformations.switchMap(reloadTrigger) {                    weatherDbModelsViewStateMutableLiveData.postValue(weatherDbModelsViewState);
+              }*/
         return weatherDbModelsViewStateMutableLiveData;
     }
    /* public LiveData<WeatherCitiesViewState> getRemoteListCitiesWeather(String q) {
@@ -87,12 +97,12 @@ public class WeatherViewModel extends BaseViewModel {
 
 
     public LiveData<AccuWeatherModelViewState> getRemotegetAccuWeatherData(String cityKey) {
-       // return weatherRepository.getRemotegetAccuWeatherData(cityKey);
+        // return weatherRepository.getRemotegetAccuWeatherData(cityKey);
         AccuWeatherModelViewState accuWeatherModelViewState = new AccuWeatherModelViewState();
-        execute(
-                new Consumer<Subscription>() {
+        executeSingle(
+                new Consumer<Disposable>() {
                     @Override
-                    public void accept(Subscription subscription) throws Exception {
+                    public void accept(Disposable disposable) throws Exception {
                         accuWeatherModelViewState.setNetworkState(NetworkState.LOADING);
                         accuWeatherModelViewStateMutableLiveData.postValue(accuWeatherModelViewState);
                     }
@@ -112,16 +122,13 @@ public class WeatherViewModel extends BaseViewModel {
 
     }
 
-  /*  public LiveData<AccuWeather5DayModel> getRemotegetAccu5DayWeatherData(String cityKey) {
-        return weatherRepository.getAccuWeatherData5days(cityKey);
-    }*/
     public LiveData<Accu5DayWeatherModelViewState> getRemotegetAccu5DayWeatherData(String cityKey) {
 
         Accu5DayWeatherModelViewState accu5DayWeatherModelViewState = new Accu5DayWeatherModelViewState();
-        execute(
-                new Consumer<Subscription>() {
+        executeSingle(
+                new Consumer<Disposable>() {
                     @Override
-                    public void accept(Subscription subscription) throws Exception {
+                    public void accept(Disposable disposable) throws Exception {
                         accu5DayWeatherModelViewState.setNetworkState(NetworkState.LOADING);
                         accu5DayWeatherModelViewStateMutableLiveData.postValue(accu5DayWeatherModelViewState);
                     }
@@ -135,32 +142,57 @@ public class WeatherViewModel extends BaseViewModel {
                     accu5DayWeatherModelViewState.setNetworkState(NetworkState.error(throwable.getMessage()));
                     accu5DayWeatherModelViewStateMutableLiveData.postValue(accu5DayWeatherModelViewState);
                 },
-                weatherRepository.getAccuWeatherData5days(cityKey).toFlowable()
+                weatherRepository.getAccuWeatherData5days(cityKey)
         );
         return accu5DayWeatherModelViewStateMutableLiveData;
     }
+    //insert and return Completable
 
-    public LiveData<AccuDbInsertViewState> insertWeatherCity(AccuWeatherDb weatherDb) {
-       // weatherRepository.insertWeatherCity(weatherDb);
+    public LiveData<AccuDbInsertViewState> insertWeatherCityComplete(AccuWeatherDb weatherDb) {
         AccuDbInsertViewState accuDbInsertViewState = new AccuDbInsertViewState();
-        execute(
-               /* new Consumer<Subscription>() {
-                    @Override
-                    public void accept(Subscription subscription) throws Exception {
-                        accuDbInsertViewState.setNetworkState(NetworkState.LOADING);
-                        accuDbInsertViewStateMutableLiveData.postValue(accuDbInsertViewState);
-                    }
-                }*/new Consumer<Disposable>() {
+        executeCompletable(
+                new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) throws Exception {
                         accuDbInsertViewState.setNetworkState(NetworkState.LOADING);
                         accuDbInsertViewStateMutableLiveData.postValue(accuDbInsertViewState);
                     }
                 },
-                aBoolean -> {
-                    accuDbInsertViewState.setNetworkState(NetworkState.LOADED);
-                    accuDbInsertViewState.setaBoolean(aBoolean);
+                new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        accuDbInsertViewState.setNetworkState(NetworkState.LOADED);
+                        accuDbInsertViewState.setaBoolean(true);
+                        accuDbInsertViewStateMutableLiveData.postValue(accuDbInsertViewState);
+                    }
+                },
+                throwable -> {
+                    accuDbInsertViewState.setNetworkState(NetworkState.error(throwable.getMessage()));
                     accuDbInsertViewStateMutableLiveData.postValue(accuDbInsertViewState);
+                },
+                weatherRepository.insertUsingCompleteWeatherCity(weatherDb)
+        );
+        return accuDbInsertViewStateMutableLiveData;
+    }
+
+    //insert and return observable
+    public LiveData<AccuDbInsertViewState> insertWeatherCity(AccuWeatherDb weatherDb) {
+        // weatherRepository.insertWeatherCity(weatherDb);
+        AccuDbInsertViewState accuDbInsertViewState = new AccuDbInsertViewState();
+        executeObservable(new Consumer<Disposable>() {
+                              @Override
+                              public void accept(Disposable disposable) throws Exception {
+                                  accuDbInsertViewState.setNetworkState(NetworkState.LOADING);
+                                  accuDbInsertViewStateMutableLiveData.postValue(accuDbInsertViewState);
+                              }
+                          },
+                new Consumer<Boolean>() {
+                    @Override
+                    public void accept(Boolean aBoolean) throws Exception {
+                        accuDbInsertViewState.setNetworkState(NetworkState.LOADED);
+                        accuDbInsertViewState.setaBoolean(aBoolean);
+                        accuDbInsertViewStateMutableLiveData.postValue(accuDbInsertViewState);
+                    }
                 },
                 throwable -> {
                     accuDbInsertViewState.setNetworkState(NetworkState.error(throwable.getMessage()));

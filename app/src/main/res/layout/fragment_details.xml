@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
 
     android:background="@color/colorGrayLight"
-    tools:context=".ui.detailWeather.DetailsActivity">
+    >
 
 
     <androidx.recyclerview.widget.RecyclerView

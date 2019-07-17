@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -17,9 +18,11 @@ import godaa.android.com.weathertaskapp.data.model.AccuWeather5DayModel;
 import godaa.android.com.weathertaskapp.data.model.AccuWeatherModel;
 import godaa.android.com.weathertaskapp.data.model.LocationSearchModel;
 import godaa.android.com.weathertaskapp.data.remote.api.ApiService;
+import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.functions.Action;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -63,7 +66,7 @@ public class WeatherRepository {
         return data;
     }
 */
-    public Flowable<List<AccuWeatherModel>> getRemotegetAccuWeatherData(String cityKey) {
+    public Single<List<AccuWeatherModel>> getRemotegetAccuWeatherData(String cityKey) {
         return remote.getAccuWeatherData(cityKey);
     }
 
@@ -114,6 +117,15 @@ public class WeatherRepository {
         return Observable.fromCallable(() -> {
             local.insertAll(weatherDb);
             return true;
+        });
+    }
+    public Completable insertUsingCompleteWeatherCity(final AccuWeatherDb weatherDb) {
+        return Completable.fromAction(new Action() {
+            @Override
+            public void run() throws Exception {
+                local.insertWeatherResponse(weatherDb);
+
+            }
         });
     }
   /*  public void insertWeatherCity(AccuWeatherDb weatherDb) {

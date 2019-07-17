@@ -18,7 +18,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import godaa.android.com.weathertaskapp.R;
 import godaa.android.com.weathertaskapp.data.model.AccuWeather5DayModel;
-import godaa.android.com.weathertaskapp.ui.base.BaseFragmentList;
 import godaa.android.com.weathertaskapp.utils.ItemOffsetDecoration;
 
 public class DetailFragment extends Fragment {
@@ -35,7 +34,7 @@ public class DetailFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_details, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_details, container, false);
         ButterKnife.bind(this, rootView);
         return rootView;
     }

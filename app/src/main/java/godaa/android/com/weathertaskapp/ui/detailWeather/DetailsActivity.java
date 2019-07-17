@@ -22,7 +22,7 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_details);
+        setContentView(R.layout.fragment_details);
         ButterKnife.bind(this);
         setrecyleview();
         // AccuWeather5DayModel accuWeather5DayModel = getIntent().getExtras().getParcelable("weatherDetails");

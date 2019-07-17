@@ -7,11 +7,14 @@ import androidx.lifecycle.ViewModel;
 
 import org.reactivestreams.Subscription;
 
+import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.Scheduler;
+import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
 public class BaseViewModel extends ViewModel {
@@ -27,7 +30,7 @@ public class BaseViewModel extends ViewModel {
     }
 
     @SuppressLint("RestrictedApi")
-    protected <T> void execute(Consumer<Subscription> loadingConsumer, Consumer<T> successConsumer, Consumer<Throwable> throwableConsumer, Flowable<T> useCase) {
+    protected <T> void executeFlowable(Consumer<Subscription> loadingConsumer, Consumer<T> successConsumer, Consumer<Throwable> throwableConsumer, Flowable<T> useCase) {
         Preconditions.checkNotNull(successConsumer);
         Preconditions.checkNotNull(throwableConsumer);
         final Flowable<T> observable = useCase
@@ -37,7 +40,17 @@ public class BaseViewModel extends ViewModel {
         addDisposable(observable.subscribe(successConsumer, throwableConsumer));
     }
     @SuppressLint("RestrictedApi")
-    protected <T> void execute(Consumer<Disposable> loadingConsumer, Consumer<T> successConsumer, Consumer<Throwable> throwableConsumer, Observable<T> useCase) {
+    protected <T> void executeSingle(Consumer<Disposable> loadingConsumer, Consumer<T> successConsumer, Consumer<Throwable> throwableConsumer, Single<T> useCase) {
+        Preconditions.checkNotNull(successConsumer);
+        Preconditions.checkNotNull(throwableConsumer);
+        final Single<T> observable = useCase
+                .doOnSubscribe(loadingConsumer)
+                .subscribeOn(subscribeOn)
+                .observeOn(observeOn);
+        addDisposable(observable.subscribe(successConsumer, throwableConsumer));
+    }
+    @SuppressLint("RestrictedApi")
+    protected <T> void executeObservable(Consumer<Disposable> loadingConsumer, Consumer<T> successConsumer, Consumer<Throwable> throwableConsumer, Observable<T> useCase) {
         Preconditions.checkNotNull(successConsumer);
         Preconditions.checkNotNull(throwableConsumer);
         final Observable<T> observable = useCase
@@ -45,6 +58,16 @@ public class BaseViewModel extends ViewModel {
                 .subscribeOn(subscribeOn)
                 .observeOn(observeOn);
         addDisposable(observable.subscribe(successConsumer, throwableConsumer));
+    }
+    @SuppressLint("RestrictedApi")
+    protected <T> void executeCompletable(Consumer<Disposable> loadingConsumer, Action successConsumer, Consumer<Throwable> throwableConsumer, Completable useCase) {
+        Preconditions.checkNotNull(successConsumer);
+        Preconditions.checkNotNull(throwableConsumer);
+        final Completable completable = useCase
+                .doOnSubscribe(loadingConsumer)
+                .subscribeOn(subscribeOn)
+                .observeOn(observeOn);
+        addDisposable(completable.subscribe( successConsumer, throwableConsumer));
     }
     /**
      * Dispose from current {@link CompositeDisposable}.

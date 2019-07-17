@@ -1,6 +1,7 @@
 package godaa.android.com.weathertaskapp.ui.weatherCities;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +10,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +24,8 @@ import butterknife.ButterKnife;
 import godaa.android.com.weathertaskapp.R;
 import godaa.android.com.weathertaskapp.data.model.AccuWeatherModel;
 import godaa.android.com.weathertaskapp.data.model.LocationSearchModel;
+import godaa.android.com.weathertaskapp.ui.MainActivity;
+import godaa.android.com.weathertaskapp.ui.detailWeather.DetailFragment;
 import godaa.android.com.weathertaskapp.ui.detailWeather.DetailsActivity;
 import godaa.android.com.weathertaskapp.ui.interfaces.ISuccesFirstWeather;
 import godaa.android.com.weathertaskapp.ui.interfaces.NavigateTo;
@@ -63,7 +68,9 @@ public class RecyclerAdapterCitesAccuWeather extends RecyclerView.Adapter<Recycl
         holder.linLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navigateTo.navigate(DetailsActivity.class, position);
+                navigateTo.navigate(v,DetailsActivity.class, position);
+
+
             }
         });
         Glide.with(mContext)

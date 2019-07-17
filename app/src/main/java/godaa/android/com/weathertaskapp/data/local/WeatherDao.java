@@ -13,15 +13,17 @@ import io.reactivex.Flowable;
 
 @Dao
 public interface WeatherDao {
-
+    //return flowable to listen if weather change in any time
     @Query("select * from weather")
     Flowable<List<AccuWeatherDb>> getWeather();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertWeatherResponse(AccuWeatherDb weather);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(AccuWeatherDb... weathers);
+
     @Query("DELETE FROM weather")
-    public  void clearAllData();
+    public void clearAllData();
 
 }

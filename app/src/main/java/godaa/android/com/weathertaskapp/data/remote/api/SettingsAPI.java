@@ -3,11 +3,15 @@ package godaa.android.com.weathertaskapp.data.remote.api;
 public class SettingsAPI {
 
     public String getApiKey() {
-        return "OebhI4gfbAd9RJvlaHfWez06qE4qNnxx";
+        return "87ad516d1d4842838fcfebe843d933b1";
+
+      //  return "2BGaQeuL98MDLx6vIiZWx0lGMFqj68Xt";
     }
 
     public String getBaseURL() {
-        return "http://dataservice.accuweather.com/";
+        return "http://api.accuweather.com/";
+
+      //  return "http://dataservice.accuweather.com/";
     }
 
     public Long getTimeout() {

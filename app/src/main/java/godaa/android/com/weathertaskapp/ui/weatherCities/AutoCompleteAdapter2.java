@@ -27,7 +27,6 @@ import retrofit2.Response;
 public class AutoCompleteAdapter2 extends BaseAdapter implements Filterable {
 
     private List<LocationSearchModel> mResultList = new ArrayList<>();
-    private String BASE_URL_ACCU_WEATHER = "http://api.accuweather.com/";
     private Context mContext;
     WeatherViewModel mViewModel;
     Activity activity;
