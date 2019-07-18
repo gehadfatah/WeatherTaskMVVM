@@ -128,6 +128,15 @@ public class WeatherRepository {
             }
         });
     }
+    public Completable deleteWeather(final String keyLocation) {
+        return Completable.fromAction(new Action() {
+            @Override
+            public void run() throws Exception {
+                local.deleteWeather(keyLocation);
+
+            }
+        });
+    }
   /*  public void insertWeatherCity(AccuWeatherDb weatherDb) {
         Executor executor = Executors.newSingleThreadExecutor();
         executor.execute(new Runnable() {

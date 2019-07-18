@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +39,7 @@ public abstract class BaseFragmentList extends Fragment {
     public View noDataLayout;
     public View noConnectionLayout;
     public ProgressBar progress_bar;
-
+    protected View rootView;
     public abstract void onCreateView(View view, Bundle savedInstanceState);
 
     public abstract void setUpObservers();
@@ -78,7 +80,7 @@ public abstract class BaseFragmentList extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(getLayoutId(), container, false);
-
+        this. rootView=rootView;
         mSwipeRefreshLayout = rootView.findViewById(R.id.swiperefresh);
         recyclerView = rootView.findViewById(R.id.recycler_view);
         noDataLayout = rootView.findViewById(R.id.no_data_layout);
@@ -119,7 +121,11 @@ public abstract class BaseFragmentList extends Fragment {
         }
 
     }
-
+    public void showSnack(View mLayout,String messege) {
+        Snackbar.make(mLayout, messege,
+                Snackbar.LENGTH_SHORT)
+                .show();
+    }
     @Override
     public void onDestroyView() {
         //because they leak

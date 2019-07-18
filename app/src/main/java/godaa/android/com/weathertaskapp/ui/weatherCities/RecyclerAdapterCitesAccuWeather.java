@@ -37,9 +37,10 @@ public class RecyclerAdapterCitesAccuWeather extends RecyclerView.Adapter<Recycl
     private List<AccuWeatherModel> accuWeatherModels = new ArrayList<>();
     NavigateTo navigateTo;
     ISuccesFirstWeather iSuccesFirstWeather;
-
-    public RecyclerAdapterCitesAccuWeather(Context context, ISuccesFirstWeather iSuccesFirstWeather, NavigateTo navigateTo, List<LocationSearchModel> locationSearchModelArrayList, List<AccuWeatherModel> AccuWeather5DayModelcities) {
+    DeleteFromDatabase deleteFromDatabase;
+    public RecyclerAdapterCitesAccuWeather(Context context,DeleteFromDatabase deleteFromDatabase, ISuccesFirstWeather iSuccesFirstWeather, NavigateTo navigateTo, List<LocationSearchModel> locationSearchModelArrayList, List<AccuWeatherModel> AccuWeather5DayModelcities) {
         this.mContext = context;
+        this.deleteFromDatabase = deleteFromDatabase;
         this.locationSearchModelArrayList = locationSearchModelArrayList;
         this.accuWeatherModels = AccuWeather5DayModelcities;
         this.navigateTo = navigateTo;
@@ -81,6 +82,7 @@ public class RecyclerAdapterCitesAccuWeather extends RecyclerView.Adapter<Recycl
             public void onClick(View v) {
                 accuWeatherModels.remove(holder.getAdapterPosition());
                 notifyItemRemoved(holder.getAdapterPosition());
+                deleteFromDatabase.delete(locationSearchModel.getKey());
 
             }
         });

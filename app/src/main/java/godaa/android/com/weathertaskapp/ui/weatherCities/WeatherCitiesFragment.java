@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,11 +42,13 @@ import godaa.android.com.weathertaskapp.ui.interfaces.ISuccesReturnLocation;
 import godaa.android.com.weathertaskapp.ui.interfaces.NavigateTo;
 import godaa.android.com.weathertaskapp.utils.ActivityUtils;
 import godaa.android.com.weathertaskapp.utils.ItemOffsetDecoration;
+import godaa.android.com.weathertaskapp.utils.KeyboardUtils;
+import godaa.android.com.weathertaskapp.utils.Utilities;
 import godaa.android.com.weathertaskapp.utils.ViewModelFactory;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class WeatherCitiesFragment extends BaseFragmentList implements ISuccesReturnLocation, SwipeRefreshLayout.OnRefreshListener, IAddCityResponse, ISuccesFirstWeather, NavigateTo {
+public class WeatherCitiesFragment extends BaseFragmentList implements DeleteFromDatabase, ISuccesReturnLocation, SwipeRefreshLayout.OnRefreshListener, IAddCityResponse, ISuccesFirstWeather, NavigateTo {
 
     public static final String TAG = WeatherCitiesFragment.class.getSimpleName();
     private static Fragment fragment;
@@ -226,10 +229,12 @@ public class WeatherCitiesFragment extends BaseFragmentList implements ISuccesRe
     }
 
     private void CallAdd() {
+        hideKeyboard();
 
         if (maccuWeatherModel != null && mLocationSearchModel != null) {
             //if (firstAddedLocationOrDefaultLondon) {
-            if (cities.size() > 5) {
+            if (cities.size() > 4) {
+                showSnack(rootView, "Limit to 5 cities you can add more by delete one");
 
             } else {
                 AddClick(maccuWeather5DayModel, maccuWeatherModel, mLocationSearchModel);
@@ -293,7 +298,7 @@ public class WeatherCitiesFragment extends BaseFragmentList implements ISuccesRe
         recyclerView.setHasFixedSize(true);
         ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(getActivity(), R.dimen.item_offset);
         recyclerView.addItemDecoration(itemDecoration);
-        adapterCitesAccuWeather = new RecyclerAdapterCitesAccuWeather(getActivity(), this, this, cities, accuWeatherModelcities);
+        adapterCitesAccuWeather = new RecyclerAdapterCitesAccuWeather(getActivity(), this, this, this, cities, accuWeatherModelcities);
         recyclerView.setAdapter(adapterCitesAccuWeather);
     }
 
@@ -379,6 +384,16 @@ public class WeatherCitiesFragment extends BaseFragmentList implements ISuccesRe
 
     }
 
+    @Override
+    public void delete(String key) {
+        hideKeyboard();
+        mViewModel.deleteWeather(key);
+    }
+
+    private void hideKeyboard() {
+        KeyboardUtils.hideSoftInput(Objects.requireNonNull(getActivity()));
+
+    }
 
 
  /*   @Override

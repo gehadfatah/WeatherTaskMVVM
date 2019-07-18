@@ -24,6 +24,8 @@ public interface WeatherDao {
     void insertAll(AccuWeatherDb... weathers);
 
     @Query("DELETE FROM weather")
-    public void clearAllData();
+    void clearAllData();
 
+    @Query("DELETE FROM weather Where  keyLocation == :keyLocation")
+    void deleteWeather(String keyLocation);
 }

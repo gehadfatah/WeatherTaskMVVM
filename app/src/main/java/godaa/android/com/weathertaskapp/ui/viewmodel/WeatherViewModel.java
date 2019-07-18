@@ -31,6 +31,7 @@ import timber.log.Timber;
 public class WeatherViewModel extends BaseViewModel {
     WeatherRepository weatherRepository;
     private MutableLiveData<AccuDbInsertViewState> accuDbInsertViewStateMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<AccuDbInsertViewState> delete = new MutableLiveData<>();
     private MutableLiveData<WeatherDbModelsViewState> weatherDbModelsViewStateMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<AccuWeatherModelViewState> accuWeatherModelViewStateMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<WeatherCitiesViewState> locationSearchModelsLiveData = new MutableLiveData<>();
@@ -175,6 +176,33 @@ public class WeatherViewModel extends BaseViewModel {
         return accuDbInsertViewStateMutableLiveData;
     }
 
+    public LiveData<AccuDbInsertViewState> deleteWeather(String key) {
+        AccuDbInsertViewState accuDbInsertViewState = new AccuDbInsertViewState();
+        executeCompletable(
+                new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        accuDbInsertViewState.setNetworkState(NetworkState.LOADING);
+                        delete.postValue(accuDbInsertViewState);
+                    }
+                },
+                new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        accuDbInsertViewState.setNetworkState(NetworkState.LOADED);
+                        accuDbInsertViewState.setaBoolean(true);
+                        delete.postValue(accuDbInsertViewState);
+                    }
+                },
+                throwable -> {
+                    accuDbInsertViewState.setNetworkState(NetworkState.error(throwable.getMessage()));
+                    delete.postValue(accuDbInsertViewState);
+                },
+                weatherRepository.deleteWeather(key)
+        );
+        return delete;
+
+    }
     //insert and return observable
     public LiveData<AccuDbInsertViewState> insertWeatherCity(AccuWeatherDb weatherDb) {
         // weatherRepository.insertWeatherCity(weatherDb);
