@@ -26,6 +26,8 @@ public interface ApiService {
     Call<List<LocationSearchModel>> getAccuWeatherCities(/*@Query("apikey") String appId,*/ @Query("q") String query);
     @GET("forecasts/v1/daily/5day/{key}?metric=true")
     Single<AccuWeather5DayModel> getAccuWeatherData5days(@Path("key") String cityKey);
+    @GET("locations/v1/cities/geoposition/search")
+    Single<LocationSearchModel> getAccuWeatherBylocation(@Query("q") String query);
 
 }
 

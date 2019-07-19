@@ -112,6 +112,9 @@ public class WeatherRepository {
     public Single<AccuWeather5DayModel> getAccuWeatherData5days(String cityKey) {
         return remote.getAccuWeatherData5days(cityKey);
     }
+    public Single<LocationSearchModel> getAccuWeatherBylocation(String q) {
+        return remote.getAccuWeatherBylocation(q);
+    }
 
     public Observable<Boolean> insertWeatherCity(final AccuWeatherDb weatherDb) {
         return Observable.fromCallable(() -> {

@@ -38,5 +38,6 @@
     <string name="addCity">Add city</string>
     <string name="weatherDetails">weatherDetails</string>
     <string name="exitText">Are you sure you want to exit weather?</string>
+    <string name="delete_city">Delete City</string>
 
 </resources>

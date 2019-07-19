@@ -16,6 +16,7 @@ import godaa.android.com.weathertaskapp.data.model.AccuWeather5DayModel;
 import godaa.android.com.weathertaskapp.data.model.AccuWeatherModel;
 import godaa.android.com.weathertaskapp.data.model.AccuWeatherModelViewState;
 import godaa.android.com.weathertaskapp.data.model.LocationSearchModel;
+import godaa.android.com.weathertaskapp.data.model.LocationWeatherModelViewState;
 import godaa.android.com.weathertaskapp.data.model.NetworkState;
 import godaa.android.com.weathertaskapp.data.model.WeatherCitiesViewState;
 import godaa.android.com.weathertaskapp.data.model.WeatherDbModelsViewState;
@@ -36,6 +37,7 @@ public class WeatherViewModel extends BaseViewModel {
     private MutableLiveData<AccuWeatherModelViewState> accuWeatherModelViewStateMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<WeatherCitiesViewState> locationSearchModelsLiveData = new MutableLiveData<>();
     private MutableLiveData<Accu5DayWeatherModelViewState> accu5DayWeatherModelViewStateMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<LocationWeatherModelViewState> locationWeatherModelViewStateMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Boolean> reloadTrigger = new MutableLiveData<Boolean>();
 
     public WeatherViewModel(Scheduler subscribeOn, Scheduler observeOn, WeatherRepository weatherRepository) {
@@ -146,6 +148,30 @@ public class WeatherViewModel extends BaseViewModel {
                 weatherRepository.getAccuWeatherData5days(cityKey)
         );
         return accu5DayWeatherModelViewStateMutableLiveData;
+    }
+    public LiveData<LocationWeatherModelViewState> getAccuWeatherBylocation(String latLong) {
+
+        LocationWeatherModelViewState locationWeatherModelViewState = new LocationWeatherModelViewState();
+        executeSingle(
+                new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        locationWeatherModelViewState.setNetworkState(NetworkState.LOADING);
+                        locationWeatherModelViewStateMutableLiveData.postValue(locationWeatherModelViewState);
+                    }
+                },
+                locationSearchModel -> {
+                    locationWeatherModelViewState.setNetworkState(NetworkState.LOADED);
+                    locationWeatherModelViewState.setLocationSearchModel(locationSearchModel);
+                    locationWeatherModelViewStateMutableLiveData.postValue(locationWeatherModelViewState);
+                },
+                throwable -> {
+                    locationWeatherModelViewState.setNetworkState(NetworkState.error(throwable.getMessage()));
+                    locationWeatherModelViewStateMutableLiveData.postValue(locationWeatherModelViewState);
+                },
+                weatherRepository.getAccuWeatherBylocation(latLong)
+        );
+        return locationWeatherModelViewStateMutableLiveData;
     }
     //insert and return Completable
 

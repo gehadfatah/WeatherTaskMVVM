@@ -8,12 +8,16 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.chauthai.swipereveallayout.SwipeListener;
+import com.chauthai.swipereveallayout.SwipeRevealLayout;
+import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -31,13 +35,15 @@ import godaa.android.com.weathertaskapp.ui.interfaces.ISuccesFirstWeather;
 import godaa.android.com.weathertaskapp.ui.interfaces.NavigateTo;
 
 
-public class RecyclerAdapterCitesAccuWeather extends RecyclerView.Adapter<RecyclerAdapterCitesAccuWeather.RecyclerViewHolder> {
+public class RecyclerAdapterCitesAccuWeather extends RecyclerView.Adapter<RecyclerAdapterCitesAccuWeather.RecyclerViewHolder> implements SwipeListener {
     private Context mContext;
     private List<LocationSearchModel> locationSearchModelArrayList = new ArrayList<>();
     private List<AccuWeatherModel> accuWeatherModels = new ArrayList<>();
     NavigateTo navigateTo;
     ISuccesFirstWeather iSuccesFirstWeather;
     DeleteFromDatabase deleteFromDatabase;
+    private final ViewBinderHelper binderHelper = new ViewBinderHelper();
+
     public RecyclerAdapterCitesAccuWeather(Context context,DeleteFromDatabase deleteFromDatabase, ISuccesFirstWeather iSuccesFirstWeather, NavigateTo navigateTo, List<LocationSearchModel> locationSearchModelArrayList, List<AccuWeatherModel> AccuWeather5DayModelcities) {
         this.mContext = context;
         this.deleteFromDatabase = deleteFromDatabase;
@@ -50,12 +56,14 @@ public class RecyclerAdapterCitesAccuWeather extends RecyclerView.Adapter<Recycl
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.row_city_recycler, null);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.row_list, null);
         return new RecyclerViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
+       // binderHelper.bind(holder.swipeLayout, data);
+        holder.swipeLayout.setSwipeListener(this);
 
         LocationSearchModel locationSearchModel = locationSearchModelArrayList.get(position);
         AccuWeatherModel accuWeatherModel = accuWeatherModels.get(position);
@@ -96,6 +104,29 @@ public class RecyclerAdapterCitesAccuWeather extends RecyclerView.Adapter<Recycl
             return accuWeatherModels.size();
     }
 
+    @Override
+    public void onClosed(SwipeRevealLayout view) {
+
+    }
+
+    @Override
+    public void onOpened(SwipeRevealLayout view, int dragEdge) {
+        final RecyclerViewHolder holder = (RecyclerViewHolder) view.getTag();
+        if (dragEdge == SwipeRevealLayout.DRAG_EDGE_LEFT)
+            holder.deleteLayout.performClick();
+    }
+
+    @Override
+    public void onSlide(SwipeRevealLayout view, float slideOffset) {
+
+    }
+
+    @Override
+    public void onTouchUp(boolean isUp) {
+
+    }
+
+
     public class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.tv_country_name)
@@ -109,9 +140,11 @@ public class RecyclerAdapterCitesAccuWeather extends RecyclerView.Adapter<Recycl
         @BindView(R.id.temp)
         TextView temp;
         @BindView(R.id.delete_layout)
-        FrameLayout deleteLayout;
+        RelativeLayout deleteLayout;
         @BindView(R.id.linLayout)
         LinearLayout linLayout;
+        @BindView(R.id.swipe_layout)
+        SwipeRevealLayout swipeLayout;
         View view;
 
         public RecyclerViewHolder(View itemView) {
@@ -119,6 +152,8 @@ public class RecyclerAdapterCitesAccuWeather extends RecyclerView.Adapter<Recycl
             view = itemView;
 
             ButterKnife.bind(this, itemView);
+            swipeLayout.setTag(this);
+
         }
     }
 }

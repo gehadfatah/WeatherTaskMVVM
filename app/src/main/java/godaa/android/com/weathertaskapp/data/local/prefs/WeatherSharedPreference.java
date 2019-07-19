@@ -57,7 +57,7 @@ public class WeatherSharedPreference {
      */
     public boolean retrieveBooleanFromSharedPreference(String key) {
 
-        return mPreference.getBoolean(key, true);
+        return mPreference.getBoolean(key, false);
     }
 
 

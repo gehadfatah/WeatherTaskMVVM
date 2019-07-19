@@ -68,8 +68,8 @@ dependencies {
     implementation "com.jakewharton.threetenabp:threetenabp:$threetenabp_version"
     // Timber
     implementation "com.jakewharton.timber:timber:$timber_version"
-
-    implementation'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
+    //swipe
+    implementation 'com.github.hydrated:SwipeRevealLayout:960abd4'
 /*
 
 // Dagger core
