@@ -1,0 +1,65 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/appwidget_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/widget_margin">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/widget_background"
+        android:scaleType="matrix"
+        android:src="@drawable/widget_bg" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/dimen_16"
+        android:layout_marginTop="@dimen/dimen_16"
+        android:layout_toStartOf="@+id/appwidget_icon"
+        android:orientation="vertical"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="@dimen/dimen_16"
+        android:layout_toLeftOf="@+id/appwidget_icon">
+
+        <TextView
+            android:id="@+id/appwidget_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:contentDescription="@string/appwidget_text"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textSize="@dimen/text_20"
+            android:textStyle="bold"
+            tools:text="Lagos" />
+
+
+        <TextView
+            android:id="@+id/appwidget_condition"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="@dimen/dimen_8"
+            android:contentDescription="@string/appwidget_text"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            tools:text="Partly Cloudy" />
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/appwidget_icon"
+        android:layout_width="@dimen/widget_image_size"
+        android:layout_height="@dimen/widget_image_size"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="@dimen/dimen_8"
+        android:contentDescription="@string/condition_text"
+        tools:srcCompat="@tools:sample/avatars" />
+
+</RelativeLayout>

@@ -41,4 +41,10 @@
     <dimen name="textSize_6sp">6sp</dimen>
     <dimen name="snashButtonRecommend">9sp</dimen>
     <dimen name="snashFloating">10sp</dimen>
+    <dimen name="widget_margin">8dp</dimen>
+    <dimen name="dimen_16">16dp</dimen>
+    <dimen name="text_20">20sp</dimen>
+    <dimen name="dimen_8">8dp</dimen>
+    <dimen name="widget_image_size">150dp</dimen>
+
 </resources>

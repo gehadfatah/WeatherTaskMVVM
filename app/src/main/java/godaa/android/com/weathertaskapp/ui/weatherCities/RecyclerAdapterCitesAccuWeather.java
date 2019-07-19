@@ -26,6 +26,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import godaa.android.com.weathertaskapp.R;
+import godaa.android.com.weathertaskapp.data.local.prefs.WeatherSharedPreference;
 import godaa.android.com.weathertaskapp.data.model.AccuWeatherModel;
 import godaa.android.com.weathertaskapp.data.model.LocationSearchModel;
 import godaa.android.com.weathertaskapp.ui.MainActivity;
@@ -33,6 +34,7 @@ import godaa.android.com.weathertaskapp.ui.detailWeather.DetailFragment;
 import godaa.android.com.weathertaskapp.ui.detailWeather.DetailsActivity;
 import godaa.android.com.weathertaskapp.ui.interfaces.ISuccesFirstWeather;
 import godaa.android.com.weathertaskapp.ui.interfaces.NavigateTo;
+import godaa.android.com.weathertaskapp.utils.WeatherConstants;
 
 
 public class RecyclerAdapterCitesAccuWeather extends RecyclerView.Adapter<RecyclerAdapterCitesAccuWeather.RecyclerViewHolder> implements SwipeListener {
@@ -44,7 +46,7 @@ public class RecyclerAdapterCitesAccuWeather extends RecyclerView.Adapter<Recycl
     DeleteFromDatabase deleteFromDatabase;
     private final ViewBinderHelper binderHelper = new ViewBinderHelper();
 
-    public RecyclerAdapterCitesAccuWeather(Context context,DeleteFromDatabase deleteFromDatabase, ISuccesFirstWeather iSuccesFirstWeather, NavigateTo navigateTo, List<LocationSearchModel> locationSearchModelArrayList, List<AccuWeatherModel> AccuWeather5DayModelcities) {
+    public RecyclerAdapterCitesAccuWeather(Context context, DeleteFromDatabase deleteFromDatabase, ISuccesFirstWeather iSuccesFirstWeather, NavigateTo navigateTo, List<LocationSearchModel> locationSearchModelArrayList, List<AccuWeatherModel> AccuWeather5DayModelcities) {
         this.mContext = context;
         this.deleteFromDatabase = deleteFromDatabase;
         this.locationSearchModelArrayList = locationSearchModelArrayList;
@@ -60,24 +62,29 @@ public class RecyclerAdapterCitesAccuWeather extends RecyclerView.Adapter<Recycl
         return new RecyclerViewHolder(view);
     }
 
+
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
-       // binderHelper.bind(holder.swipeLayout, data);
+        // binderHelper.bind(holder.swipeLayout, data);
         holder.swipeLayout.setSwipeListener(this);
 
         LocationSearchModel locationSearchModel = locationSearchModelArrayList.get(position);
         AccuWeatherModel accuWeatherModel = accuWeatherModels.get(position);
-        if ((position == 0 &&locationSearchModel.getKey()!=null&& !locationSearchModel.getKey().equals("328328") )|| position == 1 ) {
+        if (
+                (position == 0 && locationSearchModel.getKey() != null && !locationSearchModel.getKey().equals("328328"))
+                        || position == 1
+                        || position == 0 && new WeatherSharedPreference(mContext).retrieveBooleanFromSharedPreference(WeatherConstants.locationLondon)
+        ) {
             iSuccesFirstWeather.successWeather(accuWeatherModel);
         }
         holder.tv_city_name.setText(locationSearchModel.getLocalizedName());
-        holder.tv_country_name.setText(", " + locationSearchModel.getCountry().getID());
+        holder.tv_country_name.setText(String.format(", %s", locationSearchModel.getCountry().getID()));
         holder.tv_status.setText(accuWeatherModel.getWeatherText());
         holder.temp.setText(mContext.getString(R.string.format_temperature, accuWeatherModel.getTemperature() != null ? accuWeatherModel.getTemperature().getMetric().getValue() : 0));
         holder.linLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navigateTo.navigate(v,DetailsActivity.class, position);
+                navigateTo.navigate(v, DetailsActivity.class, position);
 
 
             }

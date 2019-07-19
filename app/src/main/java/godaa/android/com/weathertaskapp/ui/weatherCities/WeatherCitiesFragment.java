@@ -1,6 +1,8 @@
 package godaa.android.com.weathertaskapp.ui.weatherCities;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -52,6 +54,7 @@ import godaa.android.com.weathertaskapp.utils.KeyboardUtils;
 import godaa.android.com.weathertaskapp.utils.Utilities;
 import godaa.android.com.weathertaskapp.utils.ViewModelFactory;
 import godaa.android.com.weathertaskapp.utils.WeatherConstants;
+import godaa.android.com.weathertaskapp.widget.WeatherWidgetProvider;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
@@ -329,7 +332,8 @@ public class WeatherCitiesFragment extends BaseFragmentList implements DeleteFro
     public void AddClick(AccuWeather5DayModel accuWeather5DayModel, AccuWeatherModel accuWeatherModel, LocationSearchModel locationSearchModel) {
         //check if location is london to not add it to database
         if (!seeIfAddedBefore(locationSearchModel) && !locationSearchModel.getKey().equals(keyLondon)
-                || (locationSearchModel.getKey().equals(keyLondon) && fromLocation)
+                || new WeatherSharedPreference(getActivity()).retrieveBooleanFromSharedPreference(WeatherConstants.locationLondon)
+                && (locationSearchModel.getKey().equals(keyLondon) && fromLocation)
                 || (new WeatherSharedPreference(getActivity()).retrieveBooleanFromSharedPreference(WeatherConstants.SelectedLondon)
                 && !seeIfAddedBefore(locationSearchModel)) /*|| (selectedLondonFromSearch&&!seeIfAddedBefore(locationSearchModel))*/) {
             // cities.add(locationSearchModel);
@@ -379,11 +383,6 @@ public class WeatherCitiesFragment extends BaseFragmentList implements DeleteFro
 
     }
 
-    @Override
-    public void successWeather(AccuWeatherModel weatherModel) {
-
-    }
-
 
     @Override
     public void navigate(View v, Class aClass, int position) {
@@ -414,6 +413,12 @@ public class WeatherCitiesFragment extends BaseFragmentList implements DeleteFro
                  /*   mViewModel.getRemotegetAccuWeatherData(locationSearchModel.getKey());
                     mViewModel.getRemotegetAccu5DayWeatherData(locationSearchModel.getKey());*/
                     fromLocation = true;
+                    if (locationSearchModel.getKey().equals("328328"))
+                        new WeatherSharedPreference(getActivity()).saveBooleanToSharedPreference(WeatherConstants.locationLondon, true);
+                    else {
+                        new WeatherSharedPreference(getActivity()).saveBooleanToSharedPreference(WeatherConstants.locationLondon, false);
+
+                    }
                     setWeatherModelObserver(locationSearchModel.getKey());
                     setWeather5DayModelObserver(locationSearchModel.getKey());
 
@@ -504,6 +509,25 @@ public class WeatherCitiesFragment extends BaseFragmentList implements DeleteFro
                 permission) == PackageManager.PERMISSION_GRANTED;
     }
 
+    @Override
+    public void successWeather(AccuWeatherModel weatherModel) {
+        updateWidgetData(weatherModel);
+
+    }
+
+    private void updateWidgetData(AccuWeatherModel weather) {
+        saveToPreferences(weather);
+        WeatherWidgetProvider.updateWidget(getActivity());
+    }
+
+    private void saveToPreferences(AccuWeatherModel weather) {
+
+        new WeatherSharedPreference(getActivity()).saveStringToSharedPreference(WIDGET_TEXT, weather.getWeatherText());
+        if (cities.size() > 0)
+            new WeatherSharedPreference(getActivity()).saveStringToSharedPreference(WIDGET_LOCATION, cities.get(0).getLocalizedName());
+        new WeatherSharedPreference(getActivity()).saveStringToSharedPreference(WIDGET_ICON, String.valueOf(weather.getWeatherIcon()));
+
+    }
     /*   @Override
        public List<LocationSearchModel> setObserver(CharSequence charSequence) {
            final List<LocationSearchModel>[] locationSearchModels = new List[]{new ArrayList<>()};

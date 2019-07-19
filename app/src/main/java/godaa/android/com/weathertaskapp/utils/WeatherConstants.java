@@ -11,6 +11,7 @@ public final class WeatherConstants {
 
     public static final String KEY_ACCESS_TOKEN = "access_token";
     public static final String SelectedLondon = "selectlondon";
+    public static final String locationLondon = "locationLondon";
 
 
     private WeatherConstants() {
