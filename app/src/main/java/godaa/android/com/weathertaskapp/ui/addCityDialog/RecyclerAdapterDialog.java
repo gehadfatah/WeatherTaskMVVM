@@ -17,7 +17,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import godaa.android.com.weathertaskapp.R;
-import godaa.android.com.weathertaskapp.data.model.AccuWeather5DayModel;
+import godaa.android.com.weathertaskapp.data.remote.model.AccuWeather5DayModel;
 
 
 public class RecyclerAdapterDialog extends RecyclerView.Adapter<RecyclerAdapterDialog.RecyclerViewHolder> {

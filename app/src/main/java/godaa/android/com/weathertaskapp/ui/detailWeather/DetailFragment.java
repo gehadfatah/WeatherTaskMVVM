@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,16 +15,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 
+import java.util.Objects;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import godaa.android.com.weathertaskapp.R;
-import godaa.android.com.weathertaskapp.data.model.AccuWeather5DayModel;
-import godaa.android.com.weathertaskapp.utils.ItemOffsetDecoration;
+import godaa.android.com.weathertaskapp.data.remote.model.AccuWeather5DayModel;
+import godaa.android.com.weathertaskapp.common.utils.ItemOffsetDecoration;
 
 public class DetailFragment extends Fragment {
     public static final String TAG = DetailFragment.class.getSimpleName();
     @BindView(R.id.rv_weather_data)
     RecyclerView rvWeatherData;
+    @BindView(R.id.city)
+    TextView cityTv;
     private Context context;
 
     @Override
@@ -31,6 +37,7 @@ public class DetailFragment extends Fragment {
         super.onAttach(context);
         this.context = context;
     }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -45,15 +52,23 @@ public class DetailFragment extends Fragment {
         setrecyleview();
         // AccuWeather5DayModel accuWeather5DayModel = getIntent().getExtras().getParcelable("weatherDetails");
         String jsonText = null;
+        String city = "";
         if (getArguments() != null) {
             jsonText = getArguments().getString(context.getString(R.string.weatherDetails));
+            city = getArguments().getString(context.getString(R.string.weatherCity));
         }
         Gson gson = new Gson();
         if (jsonText == null || jsonText.equals("")) return;
         AccuWeather5DayModel accuWeather5DayModel = gson.fromJson(getArguments().getString(getActivity().getResources().getString(R.string.weatherDetails)), AccuWeather5DayModel.class);
-        if (accuWeather5DayModel != null)
+        if (accuWeather5DayModel != null) {
             rvWeatherData.setAdapter(new RecyclerAdapterAccuWeather(context, accuWeather5DayModel));
+            cityTv.setText(city);
+        }
+    }
 
+    @OnClick(R.id.backImage)
+    public void clickBack() {
+        Objects.requireNonNull(getActivity()).onBackPressed();
     }
 
     private void setrecyleview() {

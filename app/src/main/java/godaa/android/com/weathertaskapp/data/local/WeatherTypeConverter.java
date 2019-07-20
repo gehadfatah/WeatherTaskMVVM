@@ -8,7 +8,7 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import godaa.android.com.weathertaskapp.data.model.AccuWeather5DayModel.DailyForecast;
+import godaa.android.com.weathertaskapp.data.remote.model.AccuWeather5DayModel.DailyForecast;
 
 public class WeatherTypeConverter {
     @TypeConverter

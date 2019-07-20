@@ -12,8 +12,8 @@ import com.google.gson.Gson;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import godaa.android.com.weathertaskapp.R;
-import godaa.android.com.weathertaskapp.data.model.AccuWeather5DayModel;
-import godaa.android.com.weathertaskapp.utils.ItemOffsetDecoration;
+import godaa.android.com.weathertaskapp.data.remote.model.AccuWeather5DayModel;
+import godaa.android.com.weathertaskapp.common.utils.ItemOffsetDecoration;
 
 public class DetailsActivity extends AppCompatActivity {
     @BindView(R.id.rv_weather_data)

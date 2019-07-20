@@ -21,14 +21,14 @@ import java.util.List;
 import java.util.Map;
 
 import godaa.android.com.weathertaskapp.R;
-import godaa.android.com.weathertaskapp.utils.ActivityUtils;
-import godaa.android.com.weathertaskapp.utils.Resource;
+import godaa.android.com.weathertaskapp.common.utils.ActivityUtils;
+import godaa.android.com.weathertaskapp.common.utils.Resource;
 
-import static godaa.android.com.weathertaskapp.utils.WeatherConstants.STATUS_LAYOUT_DATA;
-import static godaa.android.com.weathertaskapp.utils.WeatherConstants.STATUS_LAYOUT_LOADING;
-import static godaa.android.com.weathertaskapp.utils.WeatherConstants.STATUS_LAYOUT_NO_CONNECTION;
-import static godaa.android.com.weathertaskapp.utils.WeatherConstants.STATUS_LAYOUT_NO_DATA;
-import static godaa.android.com.weathertaskapp.utils.WeatherConstants.STATUS_SNACK_BAR_NO_CONNECTION;
+import static godaa.android.com.weathertaskapp.common.utils.WeatherConstants.STATUS_LAYOUT_DATA;
+import static godaa.android.com.weathertaskapp.common.utils.WeatherConstants.STATUS_LAYOUT_LOADING;
+import static godaa.android.com.weathertaskapp.common.utils.WeatherConstants.STATUS_LAYOUT_NO_CONNECTION;
+import static godaa.android.com.weathertaskapp.common.utils.WeatherConstants.STATUS_LAYOUT_NO_DATA;
+import static godaa.android.com.weathertaskapp.common.utils.WeatherConstants.STATUS_SNACK_BAR_NO_CONNECTION;
 
 
 public abstract class BaseFragmentList extends Fragment {

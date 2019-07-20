@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    android:layout_height="match_parent"
-   >
-
+    <LinearLayout
+        android:id="@+id/dummy_id"
+        android:layout_width="0px"
+        android:layout_height="0px"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints" />
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swiperefresh"
         android:layout_width="match_parent"
@@ -24,22 +31,58 @@
              app:layout_constraintEnd_toEndOf="parent"
              app:layout_constraintStart_toStartOf="parent"
              app:layout_constraintTop_toTopOf="parent" />-->
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorGrayLight"
-            android:padding="10dp">
+            android:background="@color/blue">
+
+            <RelativeLayout
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/tealish"
+                android:gravity="top"
+
+                android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/backImage"
+                    android:layout_width="35dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/padding_xxx"
+                    android:layout_marginLeft="@dimen/padding_xxx"
+                    android:src="@drawable/ic_place_black_24dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/padding_xxx"
+                    android:layout_toEndOf="@+id/backImage"
+                    android:gravity="center_vertical"
+                    android:text="Places"
+                    android:textColor="@color/white1"
+                    android:textSize="@dimen/textSize_15sp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
 
             <AutoCompleteTextView
                 android:id="@+id/et_city_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/toolbar"
                 android:layout_margin="10dp"
-                android:drawableEnd="@drawable/ic_search_black_24dp"
-                android:drawableRight="@drawable/ic_search_black_24dp"
+                android:drawableEnd="@drawable/ic_close_blue"
+                android:drawableRight="@drawable/ic_close_blue"
                 android:hint="@string/enter_city_name"
                 android:paddingEnd="10dp"
                 android:paddingRight="10dp"
+                android:textColor="@color/white1"
+                android:textColorHint="@color/white1"
+                android:textSize="@dimen/textSize_13sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_bias="0.454"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -53,6 +96,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/et_city_name"
                 android:layout_marginTop="8dp"
+                tools:listitem="@layout/row_list"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"

@@ -2,7 +2,7 @@ package godaa.android.com.weathertaskapp.data.remote.interceptors;
 
 import java.io.IOException;
 
-import godaa.android.com.weathertaskapp.data.remote.api.SettingsAPI;
+import godaa.android.com.weathertaskapp.data.remote.client.SettingsAPI;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.Request;

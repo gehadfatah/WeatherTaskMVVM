@@ -2,15 +2,13 @@ package godaa.android.com.weathertaskapp.data.local.entity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import java.util.Date;
 import java.util.List;
 
-import godaa.android.com.weathertaskapp.data.model.AccuWeather5DayModel;
-import godaa.android.com.weathertaskapp.data.model.AccuWeatherModel;
+import godaa.android.com.weathertaskapp.data.remote.model.AccuWeather5DayModel;
+import godaa.android.com.weathertaskapp.data.remote.model.AccuWeatherModel;
 
 
 @Entity(tableName = "weather")

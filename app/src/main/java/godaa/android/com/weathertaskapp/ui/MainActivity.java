@@ -1,27 +1,16 @@
 package godaa.android.com.weathertaskapp.ui;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 
 import java.lang.ref.WeakReference;
 
 import godaa.android.com.weathertaskapp.R;
-import godaa.android.com.weathertaskapp.ui.detailWeather.DetailFragment;
-import godaa.android.com.weathertaskapp.ui.dialog.ExitDialog;
-import godaa.android.com.weathertaskapp.ui.weatherCities.WeatherCitiesFragment;
-import timber.log.Timber;
+import godaa.android.com.weathertaskapp.ui.exitdialog.ExitDialog;
 
 public class MainActivity extends AppCompatActivity/* implements SwipeRefreshLayout.OnRefreshListener */{
     private static String FRAGMENT_CURRENT = "";
@@ -72,6 +61,16 @@ public class MainActivity extends AppCompatActivity/* implements SwipeRefreshLay
             super.onBackPressed();
         }
     }*/
+
+    @Override
+    public void onBackPressed() {
+        if (Navigation.findNavController(this,R.id.fragment).getCurrentDestination().getId()==R.id.weatherCitiesFragment) {
+            // handle back button the way you want here
+            showAlertSureExit();
+            return;
+        }
+        super.onBackPressed();
+    }
 
     @Override
     protected void onResume() {

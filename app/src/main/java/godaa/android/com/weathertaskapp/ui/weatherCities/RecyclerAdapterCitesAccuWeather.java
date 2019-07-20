@@ -1,24 +1,20 @@
 package godaa.android.com.weathertaskapp.ui.weatherCities;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.chauthai.swipereveallayout.SwipeListener;
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,14 +23,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import godaa.android.com.weathertaskapp.R;
 import godaa.android.com.weathertaskapp.data.local.prefs.WeatherSharedPreference;
-import godaa.android.com.weathertaskapp.data.model.AccuWeatherModel;
-import godaa.android.com.weathertaskapp.data.model.LocationSearchModel;
-import godaa.android.com.weathertaskapp.ui.MainActivity;
-import godaa.android.com.weathertaskapp.ui.detailWeather.DetailFragment;
+import godaa.android.com.weathertaskapp.data.remote.model.AccuWeatherModel;
+import godaa.android.com.weathertaskapp.data.remote.model.LocationSearchModel;
 import godaa.android.com.weathertaskapp.ui.detailWeather.DetailsActivity;
+import godaa.android.com.weathertaskapp.ui.interfaces.DeleteFromDatabase;
 import godaa.android.com.weathertaskapp.ui.interfaces.ISuccesFirstWeather;
 import godaa.android.com.weathertaskapp.ui.interfaces.NavigateTo;
-import godaa.android.com.weathertaskapp.utils.WeatherConstants;
+import godaa.android.com.weathertaskapp.common.utils.WeatherConstants;
 
 
 public class RecyclerAdapterCitesAccuWeather extends RecyclerView.Adapter<RecyclerAdapterCitesAccuWeather.RecyclerViewHolder> implements SwipeListener {
@@ -66,6 +61,28 @@ public class RecyclerAdapterCitesAccuWeather extends RecyclerView.Adapter<Recycl
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
         // binderHelper.bind(holder.swipeLayout, data);
+        switch (position % 4) {
+            case 0:
+                holder.linLayout.setBackground(mContext.getResources().getDrawable(R.drawable.border_white));
+                setcolortextblack(holder,R.color.black1);
+
+                break;
+            case 1:
+                holder.linLayout.setBackground(mContext.getResources().getDrawable(R.drawable.border_first));
+                setcolortextblack(holder,R.color.white1);
+
+                break;
+            case 2:
+                holder.linLayout.setBackground(mContext.getResources().getDrawable(R.drawable.border_second));
+                setcolortextblack(holder,R.color.white1);
+
+                break;
+            case 3:
+                holder.linLayout.setBackground(mContext.getResources().getDrawable(R.drawable.border_third));
+                setcolortextblack(holder,R.color.white1);
+
+                break;
+        }
         holder.swipeLayout.setSwipeListener(this);
 
         LocationSearchModel locationSearchModel = locationSearchModelArrayList.get(position);
@@ -84,7 +101,7 @@ public class RecyclerAdapterCitesAccuWeather extends RecyclerView.Adapter<Recycl
         holder.linLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navigateTo.navigate(v, DetailsActivity.class, position);
+                navigateTo.navigate(v, DetailsActivity.class, position, locationSearchModel.getLocalizedName());
 
 
             }
@@ -101,6 +118,13 @@ public class RecyclerAdapterCitesAccuWeather extends RecyclerView.Adapter<Recycl
 
             }
         });
+    }
+
+    private void setcolortextblack(RecyclerViewHolder holder,int color) {
+        holder.tv_city_name.setTextColor(mContext.getResources().getColor(color));
+        holder.tv_country_name.setTextColor(mContext.getResources().getColor(color));
+        holder.tv_status.setTextColor(mContext.getResources().getColor(color));
+        holder.temp.setTextColor(mContext.getResources().getColor(color));
     }
 
 
@@ -148,6 +172,7 @@ public class RecyclerAdapterCitesAccuWeather extends RecyclerView.Adapter<Recycl
         TextView temp;
         @BindView(R.id.delete_layout)
         RelativeLayout deleteLayout;
+
         @BindView(R.id.linLayout)
         LinearLayout linLayout;
         @BindView(R.id.swipe_layout)

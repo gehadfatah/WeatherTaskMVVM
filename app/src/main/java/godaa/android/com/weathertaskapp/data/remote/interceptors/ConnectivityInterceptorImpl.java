@@ -9,7 +9,7 @@ import java.io.IOException;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import godaa.android.com.weathertaskapp.utils.Utilities;
+import godaa.android.com.weathertaskapp.common.utils.Utilities;
 import okhttp3.Response;
 
 /**

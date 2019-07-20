@@ -12,9 +12,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import godaa.android.com.weathertaskapp.R;
-import godaa.android.com.weathertaskapp.data.model.AccuWeather5DayModel;
-import godaa.android.com.weathertaskapp.data.model.AccuWeatherModel;
-import godaa.android.com.weathertaskapp.data.model.LocationSearchModel;
+import godaa.android.com.weathertaskapp.data.remote.model.AccuWeather5DayModel;
+import godaa.android.com.weathertaskapp.data.remote.model.AccuWeatherModel;
+import godaa.android.com.weathertaskapp.data.remote.model.LocationSearchModel;
 import godaa.android.com.weathertaskapp.ui.interfaces.IAddCityResponse;
 
 /**

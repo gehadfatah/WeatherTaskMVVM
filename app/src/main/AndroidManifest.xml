@@ -10,13 +10,14 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:name=".WeatherApplication"
+        android:name=".app.WeatherApplication"
         android:usesCleartextTraffic="true"
 
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.MainActivity"
+            android:theme="@style/MainStyle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,11 +26,11 @@
         </activity>
         <activity android:name=".ui.detailWeather.DetailsActivity" />
         <service
-            android:name=".widget.WidgetUpdateService"
+            android:name=".common.widget.WidgetUpdateService"
             android:enabled="true"
             android:exported="true" />
 
-        <receiver android:name=".widget.WeatherWidgetProvider">
+        <receiver android:name=".common.widget.WeatherWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

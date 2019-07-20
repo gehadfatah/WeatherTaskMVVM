@@ -1,13 +1,13 @@
 package godaa.android.com.weathertaskapp.ui.weatherCities;
 
 import android.Manifest;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,32 +29,33 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import godaa.android.com.weathertaskapp.R;
 import godaa.android.com.weathertaskapp.data.local.prefs.WeatherSharedPreference;
-import godaa.android.com.weathertaskapp.data.model.Accu5DayWeatherModelViewState;
-import godaa.android.com.weathertaskapp.data.model.AccuDbInsertViewState;
-import godaa.android.com.weathertaskapp.data.model.AccuWeatherModelViewState;
-import godaa.android.com.weathertaskapp.data.model.WeatherDbModelsViewState;
-import godaa.android.com.weathertaskapp.data.provider.location.LocationProviderImpl;
-import godaa.android.com.weathertaskapp.ui.viewmodel.WeatherViewModel;
+import godaa.android.com.weathertaskapp.presentation.model.viewState.Accu5DayWeatherModelViewState;
+import godaa.android.com.weathertaskapp.presentation.model.viewState.AccuDbInsertViewState;
+import godaa.android.com.weathertaskapp.presentation.model.viewState.AccuWeatherModelViewState;
+import godaa.android.com.weathertaskapp.presentation.model.viewState.WeatherDbModelsViewState;
+import godaa.android.com.weathertaskapp.common.provider.location.LocationProviderImpl;
+import godaa.android.com.weathertaskapp.presentation.viewmodel.WeatherViewModel;
 import godaa.android.com.weathertaskapp.data.local.WeatherDatabase;
 import godaa.android.com.weathertaskapp.data.local.entity.AccuWeatherDb;
-import godaa.android.com.weathertaskapp.data.model.AccuWeather5DayModel;
-import godaa.android.com.weathertaskapp.data.model.AccuWeatherModel;
-import godaa.android.com.weathertaskapp.data.model.LocationSearchModel;
-import godaa.android.com.weathertaskapp.data.remote.api.APIClient;
-import godaa.android.com.weathertaskapp.repository.WeatherRepository;
+import godaa.android.com.weathertaskapp.data.remote.model.AccuWeather5DayModel;
+import godaa.android.com.weathertaskapp.data.remote.model.AccuWeatherModel;
+import godaa.android.com.weathertaskapp.data.remote.model.LocationSearchModel;
+import godaa.android.com.weathertaskapp.data.remote.client.APIClient;
+import godaa.android.com.weathertaskapp.data.repository.WeatherRepository;
 import godaa.android.com.weathertaskapp.ui.base.BaseFragmentList;
 import godaa.android.com.weathertaskapp.ui.addCityDialog.AddCityDialog;
+import godaa.android.com.weathertaskapp.ui.interfaces.DeleteFromDatabase;
 import godaa.android.com.weathertaskapp.ui.interfaces.IAddCityResponse;
 import godaa.android.com.weathertaskapp.ui.interfaces.ISuccesFirstWeather;
 import godaa.android.com.weathertaskapp.ui.interfaces.ISuccesReturnLocation;
 import godaa.android.com.weathertaskapp.ui.interfaces.NavigateTo;
-import godaa.android.com.weathertaskapp.utils.ActivityUtils;
-import godaa.android.com.weathertaskapp.utils.ItemOffsetDecoration;
-import godaa.android.com.weathertaskapp.utils.KeyboardUtils;
-import godaa.android.com.weathertaskapp.utils.Utilities;
-import godaa.android.com.weathertaskapp.utils.ViewModelFactory;
-import godaa.android.com.weathertaskapp.utils.WeatherConstants;
-import godaa.android.com.weathertaskapp.widget.WeatherWidgetProvider;
+import godaa.android.com.weathertaskapp.common.utils.ActivityUtils;
+import godaa.android.com.weathertaskapp.common.utils.ItemOffsetDecoration;
+import godaa.android.com.weathertaskapp.common.utils.KeyboardUtils;
+import godaa.android.com.weathertaskapp.common.utils.Utilities;
+import godaa.android.com.weathertaskapp.presentation.viewmodel.ViewModelFactory;
+import godaa.android.com.weathertaskapp.common.utils.WeatherConstants;
+import godaa.android.com.weathertaskapp.common.widget.WeatherWidgetProvider;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
@@ -66,6 +67,8 @@ public class WeatherCitiesFragment extends BaseFragmentList implements DeleteFro
     public WeatherRepository weatherRepository;
     @BindView(R.id.et_city_name)
     AutoCompleteTextView etCityName;
+    @BindView(R.id.dummy_id)
+    LinearLayout dummy;
     String keyLondon = "328328";
     ArrayList<LocationSearchModel> cities = new ArrayList<>();
     ArrayList<AccuWeather5DayModel> AccuWeather5DayModelcities = new ArrayList<>();
@@ -82,7 +85,7 @@ public class WeatherCitiesFragment extends BaseFragmentList implements DeleteFro
     private String[] PermissionLocation = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION};
     private boolean firstAddedLocationOrDefaultLondon = true;
-    private AutoCompleteAdapter2 autoAdapterCities;
+    private AutoCompleteAdapter autoAdapterCities;
     AddCityDialog addCityDialog;
     private boolean selectedLondonFromSearch = false;
     private boolean fromLocation = false;
@@ -90,6 +93,7 @@ public class WeatherCitiesFragment extends BaseFragmentList implements DeleteFro
     @Override
     public void onCreateView(View view, Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
+
         fragment = this;
         weatherRepository = new WeatherRepository(WeatherDatabase.getInstance().weatherDao(), APIClient.getWeatherAPI());
         ViewModelFactory viewModelFactory = new ViewModelFactory(Schedulers.io(), AndroidSchedulers.mainThread(), weatherRepository);
@@ -98,6 +102,8 @@ public class WeatherCitiesFragment extends BaseFragmentList implements DeleteFro
         setRvWeatherData();
         setSearchAutoComplete();
         mSwipeRefreshLayout.setOnRefreshListener(this);
+        dummy.requestFocus();
+
     }
 
     public static <T extends WeakReference<Fragment>> WeakReference<Fragment> getFragmnt() {
@@ -164,9 +170,10 @@ public class WeatherCitiesFragment extends BaseFragmentList implements DeleteFro
     private void setSearchAutoComplete() {
         etCityName.setThreshold(2);
         if (getActivity() == null) return;
-        autoAdapterCities = new AutoCompleteAdapter2(getActivity(), this, mViewModel);
+        autoAdapterCities = new AutoCompleteAdapter(getActivity(), this, mViewModel);
         etCityName.setAdapter(autoAdapterCities);
         etCityName.setOnItemClickListener((adapterView, view, i, l) -> {
+            hideKeyboard();
             mLocationSearchModel = (LocationSearchModel) adapterView.getAdapter().getItem(i);
             if (mLocationSearchModel.getKey().equals("328328"))
                 new WeatherSharedPreference(getActivity()).saveBooleanToSharedPreference(WeatherConstants.SelectedLondon, true);
@@ -176,8 +183,27 @@ public class WeatherCitiesFragment extends BaseFragmentList implements DeleteFro
             etCityName.setText(mLocationSearchModel.getLocalizedName());
             setWeatherModelObserver(mLocationSearchModel.getKey());
             setWeather5DayModelObserver(mLocationSearchModel.getKey());
-            hideKeyboard();
 
+        });
+
+        etCityName.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_LEFT = 0;
+                final int DRAWABLE_TOP = 1;
+                final int DRAWABLE_RIGHT = 2;
+                final int DRAWABLE_BOTTOM = 3;
+
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (etCityName.getRight() - etCityName.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        // your action here
+                        // etCityName.setCompoundDrawables(getActivity().getResources().getDrawable(R.drawable.ic_close_blue),getActivity().getResources().getDrawable(R.drawable.ic_close_blue),getActivity().getResources().getDrawable(R.drawable.ic_close_blue),null);
+                        etCityName.setText("");
+                        return true;
+                    }
+                }
+                return false;
+            }
         });
     }
 
@@ -234,7 +260,7 @@ public class WeatherCitiesFragment extends BaseFragmentList implements DeleteFro
 
                 } else {
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(1550);
                         CallAdd();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -385,13 +411,14 @@ public class WeatherCitiesFragment extends BaseFragmentList implements DeleteFro
 
 
     @Override
-    public void navigate(View v, Class aClass, int position) {
+    public void navigate(View v, Class aClass, int position, String localizedName) {
       /*  if (AccuWeather5DayModelcities.size() > 0 && AccuWeather5DayModelcities.get(position) != null)
             startActivity(new Intent(getActivity(), aClass).putExtra("weatherDetails", new Gson().toJson(AccuWeather5DayModelcities.get(position))));
 */
         if (AccuWeather5DayModelcities.size() > 0 && AccuWeather5DayModelcities.get(position) != null) {
             Bundle bundle = new Bundle();
             bundle.putString(getResources().getString(R.string.weatherDetails), new Gson().toJson(AccuWeather5DayModelcities.get(position)));
+            bundle.putString(getResources().getString(R.string.weatherCity), localizedName);
             // ((MainActivity) getActivity()).replaceFragment(DetailFragment.class, DetailFragment.TAG, bundle);
             Navigation.findNavController(v).navigate(R.id.action_weatherCitiesFragment_to_detailFragment, bundle);
 

@@ -46,6 +46,10 @@
     <color name="colorFaceBookBg">#507cc0</color>
     <color name="colorLinkedInBg">#0077b7</color>
     <color name="colorTransparent">#00b75c00</color>
+    <color name="backgr">#181818</color>
+    <color name="first">#77909b</color>
+    <color name="second">#eab96e</color>
+    <color name="third">#445964</color>
     <color name="toolbarTransparent">#00FFFFFF</color>
     <color name="black_alpha_40">#66000000</color>
 
