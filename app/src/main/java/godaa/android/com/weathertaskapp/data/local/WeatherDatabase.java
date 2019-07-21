@@ -13,13 +13,13 @@ import godaa.android.com.weathertaskapp.data.local.entity.AccuWeatherDb;
 @TypeConverters({WeatherTypeConverter.class})
 public abstract class WeatherDatabase extends RoomDatabase {
 
-    private static final String DATABASE_NAME = "weather_database";
+    public static final String DATABASE_NAME = "weather_database";
     private static final Object sLock = new Object();
     private static WeatherDatabase INSTANCE = null;
 
     public abstract WeatherDao weatherDao();
 
-    public static WeatherDatabase getInstance() {
+   /* public static WeatherDatabase getInstance() {
         if (INSTANCE == null) {
             synchronized (sLock) {
                 if (INSTANCE == null) {
@@ -31,5 +31,5 @@ public abstract class WeatherDatabase extends RoomDatabase {
             }
         }
         return INSTANCE;
-    }
+    }*/
 }

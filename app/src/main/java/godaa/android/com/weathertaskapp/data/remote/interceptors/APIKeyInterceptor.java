@@ -12,10 +12,13 @@ public class APIKeyInterceptor implements Interceptor {
 
     private SettingsAPI settingsAPI;
 
-    public APIKeyInterceptor(SettingsAPI settingsAPI) {
+    public  APIKeyInterceptor(SettingsAPI settingsAPI) {
         this.settingsAPI = settingsAPI;
     }
 
+    public SettingsAPI getSetting() {
+        return settingsAPI;
+    }
     @SuppressWarnings("NullableProblems")
     @Override
     public Response intercept(Chain chain) throws IOException {

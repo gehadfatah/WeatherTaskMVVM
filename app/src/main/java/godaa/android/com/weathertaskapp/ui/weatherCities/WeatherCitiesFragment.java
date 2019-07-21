@@ -25,9 +25,14 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import godaa.android.com.weathertaskapp.R;
+import godaa.android.com.weathertaskapp.app.WeatherApplication;
+import godaa.android.com.weathertaskapp.common.di.component.DaggerFragmentComponent;
+import godaa.android.com.weathertaskapp.common.di.component.FragmentComponent;
 import godaa.android.com.weathertaskapp.data.local.prefs.WeatherSharedPreference;
 import godaa.android.com.weathertaskapp.presentation.model.viewState.Accu5DayWeatherModelViewState;
 import godaa.android.com.weathertaskapp.presentation.model.viewState.AccuDbInsertViewState;
@@ -42,6 +47,7 @@ import godaa.android.com.weathertaskapp.data.remote.model.AccuWeatherModel;
 import godaa.android.com.weathertaskapp.data.remote.model.LocationSearchModel;
 import godaa.android.com.weathertaskapp.data.remote.client.APIClient;
 import godaa.android.com.weathertaskapp.data.repository.WeatherRepository;
+import godaa.android.com.weathertaskapp.presentation.viewmodel.factory.ViewModelFactory;
 import godaa.android.com.weathertaskapp.ui.base.BaseFragmentList;
 import godaa.android.com.weathertaskapp.ui.addCityDialog.AddCityDialog;
 import godaa.android.com.weathertaskapp.ui.interfaces.DeleteFromDatabase;
@@ -53,7 +59,6 @@ import godaa.android.com.weathertaskapp.common.utils.ActivityUtils;
 import godaa.android.com.weathertaskapp.common.utils.ItemOffsetDecoration;
 import godaa.android.com.weathertaskapp.common.utils.KeyboardUtils;
 import godaa.android.com.weathertaskapp.common.utils.Utilities;
-import godaa.android.com.weathertaskapp.presentation.viewmodel.ViewModelFactory;
 import godaa.android.com.weathertaskapp.common.utils.WeatherConstants;
 import godaa.android.com.weathertaskapp.common.widget.WeatherWidgetProvider;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -89,15 +94,17 @@ public class WeatherCitiesFragment extends BaseFragmentList implements DeleteFro
     AddCityDialog addCityDialog;
     private boolean selectedLondonFromSearch = false;
     private boolean fromLocation = false;
-
+    @Inject
+    ViewModelFactory mModelFactory;
     @Override
     public void onCreateView(View view, Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
+        initDagger();
 
         fragment = this;
-        weatherRepository = new WeatherRepository(WeatherDatabase.getInstance().weatherDao(), APIClient.getWeatherAPI());
-        ViewModelFactory viewModelFactory = new ViewModelFactory(Schedulers.io(), AndroidSchedulers.mainThread(), weatherRepository);
-        mViewModel = ViewModelProviders.of(this, viewModelFactory).get(WeatherViewModel.class);
+       // weatherRepository = new WeatherRepository(WeatherDatabase.getInstance().weatherDao(), APIClient.getWeatherAPI());
+//        ViewModelFactory viewModelFactory = new ViewModelFactory(Schedulers.io(), AndroidSchedulers.mainThread(), weatherRepository);
+        mViewModel = ViewModelProviders.of(this, mModelFactory).get(WeatherViewModel.class);
         checkLocationPermission();
         setRvWeatherData();
         setSearchAutoComplete();
@@ -110,6 +117,12 @@ public class WeatherCitiesFragment extends BaseFragmentList implements DeleteFro
         return (new WeakReference<Fragment>(fragment));
     }
 
+    private void initDagger() {
+        FragmentComponent component = DaggerFragmentComponent.builder()
+                .appComponent((WeatherApplication.getInstance()).getAppComponent())
+                .build();
+        component.inject(this);
+    }
     @Override
     public void setUpObservers() {
         mViewModel.getAccuWeatherDbLiveData().observe(this, weatherDbModelsViewState -> {
@@ -411,7 +424,7 @@ public class WeatherCitiesFragment extends BaseFragmentList implements DeleteFro
 
 
     @Override
-    public void navigate(View v, Class aClass, int position, String localizedName) {
+    public void navigate(View v,  int position, String localizedName) {
       /*  if (AccuWeather5DayModelcities.size() > 0 && AccuWeather5DayModelcities.get(position) != null)
             startActivity(new Intent(getActivity(), aClass).putExtra("weatherDetails", new Gson().toJson(AccuWeather5DayModelcities.get(position))));
 */

@@ -21,16 +21,16 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
         this.observeOn = observeOn;
     }
 
-    @NonNull
+    /*@NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(WeatherViewModel.class)) {
             //noinspection unchecked
-            return (T) new WeatherViewModel(subscribeOn, observeOn,weatherRepository);
-        } /*else if (modelClass.isAssignableFrom(ArticlesViewModel.class)) {
+           // return (T) new WeatherViewModel(subscribeOn, observeOn,weatherRepository);
+        } *//*else if (modelClass.isAssignableFrom(ArticlesViewModel.class)) {
             //noinspection unchecked
             return (T) new ArticlesViewModel(mArticleRepository);
-        } */
+        } *//*
         throw new IllegalArgumentException("Unknown ViewModel class: " + modelClass.getName());
-    }
+    }*/
 }

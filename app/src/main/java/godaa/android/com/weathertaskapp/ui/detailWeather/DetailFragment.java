@@ -17,12 +17,15 @@ import com.google.gson.Gson;
 
 import java.util.Objects;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import godaa.android.com.weathertaskapp.R;
 import godaa.android.com.weathertaskapp.data.remote.model.AccuWeather5DayModel;
 import godaa.android.com.weathertaskapp.common.utils.ItemOffsetDecoration;
+import godaa.android.com.weathertaskapp.presentation.viewmodel.factory.ViewModelFactory;
 
 public class DetailFragment extends Fragment {
     public static final String TAG = DetailFragment.class.getSimpleName();
@@ -31,7 +34,8 @@ public class DetailFragment extends Fragment {
     @BindView(R.id.city)
     TextView cityTv;
     private Context context;
-
+    @Inject
+    ViewModelFactory mModelFactory;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

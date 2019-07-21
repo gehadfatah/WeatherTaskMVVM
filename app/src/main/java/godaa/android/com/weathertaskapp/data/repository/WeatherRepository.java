@@ -3,6 +3,8 @@ package godaa.android.com.weathertaskapp.data.repository;
 import java.util.List;
 
 
+import javax.inject.Inject;
+
 import godaa.android.com.weathertaskapp.data.local.WeatherDao;
 import godaa.android.com.weathertaskapp.data.local.entity.AccuWeatherDb;
 import godaa.android.com.weathertaskapp.data.remote.model.AccuWeather5DayModel;
@@ -20,6 +22,7 @@ public class WeatherRepository {
     ApiService remote;
     private static final String TAG = WeatherRepository.class.getSimpleName();
 
+    @Inject
     public WeatherRepository(WeatherDao local, ApiService remote) {
         this.local = local;
         this.remote = remote;
@@ -100,6 +103,7 @@ public class WeatherRepository {
     public Single<AccuWeather5DayModel> getAccuWeatherData5days(String cityKey) {
         return remote.getAccuWeatherData5days(cityKey);
     }
+
     public Single<LocationSearchModel> getAccuWeatherBylocation(String q) {
         return remote.getAccuWeatherBylocation(q);
     }
@@ -110,6 +114,7 @@ public class WeatherRepository {
             return true;
         });
     }
+
     public Completable insertUsingCompleteWeatherCity(final AccuWeatherDb weatherDb) {
         return Completable.fromAction(new Action() {
             @Override
@@ -119,6 +124,7 @@ public class WeatherRepository {
             }
         });
     }
+
     public Completable deleteWeather(final String keyLocation) {
         return Completable.fromAction(new Action() {
             @Override

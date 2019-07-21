@@ -25,7 +25,6 @@ import godaa.android.com.weathertaskapp.R;
 import godaa.android.com.weathertaskapp.data.local.prefs.WeatherSharedPreference;
 import godaa.android.com.weathertaskapp.data.remote.model.AccuWeatherModel;
 import godaa.android.com.weathertaskapp.data.remote.model.LocationSearchModel;
-import godaa.android.com.weathertaskapp.ui.detailWeather.DetailsActivity;
 import godaa.android.com.weathertaskapp.ui.interfaces.DeleteFromDatabase;
 import godaa.android.com.weathertaskapp.ui.interfaces.ISuccesFirstWeather;
 import godaa.android.com.weathertaskapp.ui.interfaces.NavigateTo;
@@ -101,7 +100,7 @@ public class RecyclerAdapterCitesAccuWeather extends RecyclerView.Adapter<Recycl
         holder.linLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navigateTo.navigate(v, DetailsActivity.class, position, locationSearchModel.getLocalizedName());
+                navigateTo.navigate(v,  position, locationSearchModel.getLocalizedName());
 
 
             }

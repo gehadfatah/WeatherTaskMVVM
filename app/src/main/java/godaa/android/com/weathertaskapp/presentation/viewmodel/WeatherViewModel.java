@@ -3,6 +3,9 @@ package godaa.android.com.weathertaskapp.presentation.viewmodel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import javax.inject.Inject;
+
+import godaa.android.com.weathertaskapp.common.provider.scheduler.AppSchedulerProvider;
 import godaa.android.com.weathertaskapp.data.local.entity.AccuWeatherDb;
 import godaa.android.com.weathertaskapp.presentation.model.viewState.Accu5DayWeatherModelViewState;
 import godaa.android.com.weathertaskapp.presentation.model.viewState.AccuDbInsertViewState;
@@ -29,8 +32,9 @@ public class WeatherViewModel extends BaseViewModel {
     private MutableLiveData<LocationWeatherModelViewState> locationWeatherModelViewStateMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Boolean> reloadTrigger = new MutableLiveData<Boolean>();
 
-    public WeatherViewModel(Scheduler subscribeOn, Scheduler observeOn, WeatherRepository weatherRepository) {
-        super(subscribeOn, observeOn);
+    @Inject
+    public WeatherViewModel(AppSchedulerProvider appSchedulerProvider, WeatherRepository weatherRepository) {
+        super(appSchedulerProvider.io(), appSchedulerProvider.ui());
         this.weatherRepository = weatherRepository;
         refreshUsers();
 
@@ -58,7 +62,7 @@ public class WeatherViewModel extends BaseViewModel {
                     weatherDbModelsViewStateMutableLiveData.postValue(weatherDbModelsViewState);
                 },
 
-             weatherRepository.getWeather()
+                weatherRepository.getWeather()
         );
      /* return   Transformations.switchMap(reloadTrigger) {                    weatherDbModelsViewStateMutableLiveData.postValue(weatherDbModelsViewState);
               }*/
@@ -138,6 +142,7 @@ public class WeatherViewModel extends BaseViewModel {
         );
         return accu5DayWeatherModelViewStateMutableLiveData;
     }
+
     public LiveData<LocationWeatherModelViewState> getAccuWeatherBylocation(String latLong) {
 
         LocationWeatherModelViewState locationWeatherModelViewState = new LocationWeatherModelViewState();
@@ -218,6 +223,7 @@ public class WeatherViewModel extends BaseViewModel {
         return delete;
 
     }
+
     //insert and return observable
     public LiveData<AccuDbInsertViewState> insertWeatherCity(AccuWeatherDb weatherDb) {
         // weatherRepository.insertWeatherCity(weatherDb);
