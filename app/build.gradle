@@ -72,9 +72,6 @@ dependencies {
     //swipe
     implementation 'com.github.hydrated:SwipeRevealLayout:960abd4'
 
-// Dagger core
-    implementation "com.google.dagger:dagger:$dagger_version"
-    annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
 
     //Dependency Injection.
     implementation 'com.google.dagger:dagger:2.23.1'
