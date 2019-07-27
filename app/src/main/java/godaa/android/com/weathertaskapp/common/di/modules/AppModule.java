@@ -13,7 +13,7 @@ import godaa.android.com.weathertaskapp.common.provider.scheduler.AppSchedulerPr
 import godaa.android.com.weathertaskapp.data.local.WeatherDatabase;
 
 
-@Module(includes = {ViewModelModule.class, NetworkModule.class})
+@Module/*(includes = {ViewModelModule.class, NetworkModule.class})*/
 public class AppModule {
     Context context;
 
@@ -32,8 +32,8 @@ public class AppModule {
     }
 
     @Provides
-    WeatherDatabase provideAppDatabase(Context context) {
-        return Room.databaseBuilder(WeatherApplication.getInstance().getApplicationContext(),
+    WeatherDatabase provideAppDatabase() {
+        return Room.databaseBuilder(context,
                 WeatherDatabase.class, WeatherDatabase.DATABASE_NAME)
                 .fallbackToDestructiveMigration()
                 .build();
